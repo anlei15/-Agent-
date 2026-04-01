@@ -1,0 +1,4207 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <title>创建三维场景</title>
+    <link href="css/widgets.css" rel="stylesheet">
+    <link href="./css/font-awesome.min.css" rel="stylesheet">
+    <link href="./css/bootstrap.min.css" rel="stylesheet">
+    <link href="./Build/SuperMap3D/Widgets/widgets.css" rel="stylesheet">
+    <link href="./css/pretty.css" rel="stylesheet">
+    <link href="./css/bootstrap-select.min.css" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
+    <link href="./style/cloudAndSky.css" rel="stylesheet">
+    <link href="./style/sunLightAnalysis.css" rel="stylesheet">
+
+    <script src="./js/jquery.min.js"></script>
+    <script src="./js/config.js"></script>
+    <script src="./js/bootstrap.min.js"></script>
+    <script src="./js/bootstrap-select.min.js"></script>
+    <script src="./js/bootstrap-treeview.js"></script>
+    <script src="./js/spectrum.js"></script>
+    <script type="text/javascript" src="./Build/SuperMap3D/SuperMap3D.js"></script>\
+
+    <script src="./js/slider.js"></script>
+    <script src="./js/config.js"></script>
+    <script src="./js/tooltip.js"></script>
+    <script src="./js/spectrum.js"></script>
+    <script src="./js/shader/ScanSegmentShader.js"></script>
+    <script src="./js/shader/CircleWaveShader.js"></script>
+    <script type="text/javascript" src="./js/MaterialProperty/DynamicWallMaterialProperty_vertical.js"></script>
+    <script type="text/javascript" src="./js/MaterialProperty/DynamicWallMaterialProperty_standard.js"></script>
+
+
+
+</head>
+
+<body>
+    <div id="content" style="display:none; width:210mm; margin:0 auto;">
+        <h1>中文文字导出PDF示例</h1>
+        <p>这是一段中文文字，用于演示如何将 HTML 页面中的内容导出为 PDF 文件。</p>
+        <p>html2pdf.js 是一个基于 jsPDF 和 html2canvas 的库，支持中文、图片、表格等内容的导出。</p>
+        <p>你可以将这段文字替换成你自己的内容，比如合同、简历、说明书等。</p>
+    </div>
+    <div id="Container"></div>
+    <div id='loadingbar' class="spinner">
+        <div class="spinner-container container1">
+            <div class="circle1"></div>
+            <div class="circle2"></div>
+            <div class="circle3"></div>
+            <div class="circle4"></div>
+        </div>
+        <div class="spinner-container container2">
+            <div class="circle1"></div>
+            <div class="circle2"></div>
+            <div class="circle3"></div>
+            <div class="circle4"></div>
+        </div>
+        <div class="spinner-container container3">
+            <div class="circle1"></div>
+            <div class="circle2"></div>
+            <div class="circle3"></div>
+            <div class="circle4"></div>
+        </div>
+    </div>
+
+    <div class="navbar">
+        <div class="left-buttons">
+        </div>
+        <div class="title">智慧住宅评价系统</div>
+        <div class="right-buttons">
+        </div>
+    </div>
+
+    <!-- 顶部菜单栏 -->
+    <div class="top-menu-bar">
+        <div class="top-menu-item" data-menu="file">文件
+            <div class="top-dropdown" id="file-dd">
+                <ul>
+                    <li>新建...</li>
+                    <li id="file-open" data-action="open">打开...</li>
+                    <li>保存...</li>
+                </ul>
+            </div>
+        </div>
+        <div class="top-menu-item" data-menu="edit">编辑
+            <div class="top-dropdown" id="edit-dd">
+                <ul>
+                    <li>撤销</li>
+                    <li>重做</li>
+                </ul>
+            </div>
+        </div>
+        <div class="top-menu-item" data-menu="look">查看
+            <div class="top-dropdown" id="look-dd">
+                <ul>
+                    <li id="Cloud-open" data-action="open">云层(开启/关闭)</li>
+                    <li id="Sky-open" data-action="open">天空盒(开启/关闭)</li>
+                    <li id="CandS-open" data-action="open">云层和天空盒参数设置</li>
+                </ul>
+                <ul>
+                    <li id="leida" data-action="open">扫描雷达特效(开启/关闭)</li>
+                </ul>
+                <ul>
+                    <li id="dianziweilan" data-action="open">电子围栏特效(开启/关闭)</li>
+                </ul>
+                <ul>
+                    <li id="chaxuntexiao" data-action="open">查询特效清空</li>
+                </ul>
+                <ul>
+                    <li id="xiangaokaungtiqingkogn" data-action="open">限高框体(开启/关闭)</li>
+                </ul>
+            </div>
+        </div>
+        <div class="top-menu-item" data-menu="view">视图
+            <div class="top-dropdown" id="view-dd">
+                <ul>
+                    <li>缩放</li>
+                    <li>全屏</li>
+                </ul>
+            </div>
+        </div>
+        <div class="top-menu-item" data-menu="bookmarks">书签
+            <div class="top-dropdown" id="bookmarks-dd">
+                <ul>
+                    <li id="bookmarks-add" data-action="open">添加书签</li>
+                    <li id="bookmarks-del" data-action="open">删除书签</li>
+                </ul>
+            </div>
+        </div>
+        <div class="top-menu-item" data-menu="kongjianfenxi">空间分析
+            <div class="top-dropdown" id="Space-A">
+                <ul>
+                    <li id="xiangao" data-action="open">限高分析</li>
+                </ul>
+                <ul>
+                    <li id="SUNLIGHT" data-action="open">日照分析</li>
+                </ul>
+                <ul>
+                    <li id="look" data-action="open">查看水平剖面图</li>
+                </ul>
+                <ul>
+                    <li id="look1" data-action="open">查看垂直剖面图</li>
+                </ul>
+            </div>
+        </div>
+        <div class="top-menu-item" data-menu="output">输出
+            <div class="top-dropdown" id="CandS-Box">
+                <ul>
+                    <li id="output" data-action="open">场景出图</li>
+                </ul>
+                <ul>
+                    <li id="fenxiboagao" data-action="open">输出分析报告</li>
+                </ul>
+            </div>
+        </div>
+        <div class="top-menu-item" data-menu="bangzhu">帮助
+            <div class="top-dropdown" id="BANG-ZHU">
+                <ul>
+                    <li id="zhizhaixiangmuguifan" data-action="open">住宅项目规范文件</li>
+                </ul>
+            </div>
+        </div>
+        
+    </div>
+
+    <div class="sidebar">
+        <ul class="toolbar">
+            <li id="menu-toggle">
+                <div class="toolbar-icon">≡ </div>
+            </li>
+        </ul>
+    </div>
+
+    <!-- 弹出菜单 -->
+    <div class="popup-menu" id="popup-menu">
+        <div class="menu-header">
+            <span>菜单栏</span>
+            <span>&lt;</span>
+        </div>
+        <ul class="menu-list">
+            <li class="menu-item has-submenu" id="construction-requirements-menu">
+                <span>建设要求规范审查</span>
+                <span class="toggle">&lt;</span>
+            </li>
+            <ul class="submenu" id="construction-requirements-submenu">
+                <li class="submenu-item" id="room-requirements">
+                    <span class="room-requirements-btn">每套住宅应有卧室、起居室、厨房和卫生间</span>
+                </li>
+            </ul>
+            <li class="menu-item has-submenu" id="living-environment-menu">
+                <span>住宅环境智能监控</span>
+                <span class="toggle">&lt;</span>
+            </li>
+            <ul class="submenu" id="living-environment-submenu">
+                <li class="submenu-item" id="qihouquyu-control">
+                    <span class="qihouquyu-control-btn">查询当前建筑所在的建筑气候区域气候区域</span>
+                </li>
+                <li class="submenu-item" id="height-control">
+                    <span class="height-control-btn">住宅建筑高度控制</span>
+                </li>
+                <li class="submenu-item" id="heightDH-control">
+                    <span class="heightDH-control-btn">限高分析动画展示</span>
+                </li>
+                <li class="submenu-item" id="plotratio-control">
+                    <span class="plotratio-control-btn">建筑容积率控制</span>
+                </li>
+                <li class="submenu-item" id="buildingdensity-control">
+                    <span class="buildingdensity-control-btn">建筑密度控制</span>
+                </li>
+                <li class="submenu-item" id="Greeningrate-control">
+                    <span class="Greeningrate-control-btn">绿地率最小值控制</span>
+                </li>
+                <li class="submenu-item" id="light-control">
+                    <span class="light-control-btn">选中样式</span>
+                </li>
+            </ul>
+            <li class="menu-item has-submenu" id="architectural-space-menu">
+                <span>住宅空间智能评估</span>
+                <span class="toggle">&lt;</span>
+            </li>
+            <ul class="submenu" id="architectural-space-submenu">
+                <li class="submenu-item" id="Bedroomusablearea-control">
+                    <span class="Bedroomusablearea-control-btn">卧室使用面积计算</span>
+                </li>
+                <li class="submenu-item" id="Bedroomheight-control">
+                    <span class="Bedroomheight-control-btn">卧室层高控制</span>
+                </li>
+                <li class="submenu-item" id="Underrestriction-verification">
+                    <span class="Underrestriction-verification-btn">居住空间地下限制验证</span>
+                </li>
+                <li class="submenu-item" id="Kitchenarea-verification">
+                    <span class="Kitchenarea-verification-btn">厨房面积检验</span>
+                </li>
+                <li class="submenu-item" id="BathVL-Check">
+                    <span class="BathVL-check-btn">卫生间垂直布局冲突检查</span>
+                </li>
+            </ul>
+            <li class="menu-item has-submenu" id="Building-Safety-menu">
+                <span>建筑安全性能评估</span>
+                <span class="toggle">&lt;</span>
+            </li>
+            <ul class="submenu" id="Building-Safety-submenu">
+                <li class="submenu-item" id="shineidimiangaocha-control">
+                    <span class="height-control">室内地面高差评估</span>
+                </li>
+                <li class="submenu-item" id="window-protect-control">
+                    <span class="height-control-btn">外窗防护评估</span>
+                </li>
+                <li class="submenu-item" id="stairs-validate-control">
+                    <span class="height-control-btn">公共楼梯设置评估</span>
+                </li>
+                <li class="submenu-item" id="guardrail-installation-control">
+                    <span class="height-control-btn">防护栏杆设置评估</span>
+                </li>
+                <li class="submenu-item" id="floor-thickness-control">
+                    <span class="height-control-btn">楼板厚度评估</span>
+                </li>
+                <li class="submenu-item" id="combustion-appliances-control">
+                    <span class="height-control-btn">燃具房间净高评估</span>
+                </li>
+            </ul>
+            <li class="menu-item has-submenu" id="thermal-environment-menu">
+                <span>室内热舒适度分析</span>
+                <span class="toggle">&lt;</span>
+            </li>
+            <ul class="submenu" id="thermal-environment-submenu">
+                <li class="submenu-item" id="ventilationarea-control">
+                    <span class="ventilationarea-control-btn">通风面积5%检测</span>
+                </li>
+                <li class="submenu-item" id="RZSC-control">
+                    <span class="RZSC-control-btn">日照时长统计分析</span>
+                </li>
+            </ul>
+            <li class="menu-item has-submenu" id="Intelligent-menu">
+                <span>智能化</span>
+                <span class="toggle">&lt;</span>
+            </li>
+            <ul class="submenu" id="Intelligent-submenu">
+                <li class="submenu-item" id="Building-Intelligence-Assessment">
+                    <span class="vBuilding-Intelligence-Assessment-btn">建筑智能化评估</span>
+                </li>
+            </ul>
+            <li class="menu-item has-submenu" id="help-menu">
+                <span>帮助</span>
+                <span class="toggle">&lt;</span>
+            </li>
+            <ul class="submenu" id="help-submenu">
+                <li class="submenu-item" id="file-control">
+                    <span class="file-control-btn">住宅项目规范</span>
+                </li>
+            </ul>
+        </ul>
+    </div>
+
+    <!-- 输出窗口 -->
+    <button id="toggleConsole">显示控制台</button>
+    <div id="console">
+        <p class="log">输出窗口</p>
+        <p class="result"></p>
+    </div>
+
+    <!-- 第一个功能 -->
+    <div class="modal" id="myModal">
+        <div class="modal-header">
+            <span class="modal-title">住宅设施判断</span>
+            <span class="close-btn" id="closeModalBtn">&times;</span>
+        </div>
+        <div class="modal-content">
+            <div class="switch-container">
+                <label class="switch-label">卧 室: </label>
+                <label class="switch">
+                    <input type="checkbox" class="switch-input" id="bedroomSwitch">
+                    <span class="switch-slider"></span>
+                </label>
+            </div>
+            <div class="switch-container">
+                <label class="switch-label">起居室:</label>
+                <label class="switch">
+                    <input type="checkbox" class="switch-input" id="livingRoomSwitch">
+                    <span class="switch-slider"></span>
+                </label>
+            </div>
+            <div class="switch-container">
+                <label class="switch-label">厨 房:</label>
+                <label class="switch">
+                    <input type="checkbox" class="switch-input" id="kitchenSwitch">
+                    <span class="switch-slider"></span>
+                </label>
+            </div>
+            <div class="switch-container">
+                <label class="switch-label">卫生间:</label>
+                <label class="switch">
+                    <input type="checkbox" class="switch-input" id="bathroomSwitch">
+                    <span class="switch-slider"></span>
+                </label>
+            </div>
+            <div class="submit-container">
+                <button class="submit-btn">提交</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 图层控件-->
+    <div id='tool-menu' class='tool-menu'>
+        <a data-toggle='dropdown' id='layerMangerBtn' title='图层管理' class='tool-menu-btn tool-menu-btn-inverse'>
+            <span class='smicon-layerlist tool-menu-btn-icon'></span>
+            <div class="dropDown-container treeview-dropDown-container" id="treeContainer">
+                <div id='layerTree'></div>
+            </div>
+        </a>
+
+        <a class='tool-menu-btn tool-menu-btn-inverse' style='padding:10px 0px;' id='dividerBtn'><span
+                style='border-left : 1px solid #dddddd;'></span></a>
+
+        <div id='tool-menu-btn-group' class='tool-menu-btn-group'>
+            <a data-toggle='dropdown' id='colorBtn' title='选中颜色' class='tool-menu-btn tool-menu-btn-inverse'>
+                <span class='fui-list-small-thumbnails tool-menu-btn-icon'></span>
+                <div class="dropDown-container">
+                    <div style='min-width : 100px;border-radius : 4px;text-align : left;padding : 10px;'>
+                        <label style="font-size:8px">选中颜色： </label><input class="colorPicker" size="8"
+                            data-bind="value: material,valueUpdate: 'input'" id="colorPicker">
+                    </div>
+                    <div style="text-align : left;padding : 10px;">
+                        <label>过滤透明度：</label><input type="number" min="0" max="1" step="0.1" value="0"
+                            id="select-filter-alpha" />
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <div id="bubble" class="bubble" style="bottom:0;left:82%;display:none;">
+        <div id="tools" style="text-align : right">
+            <span style="color: #5f4a79;padding: 5px;position: absolute;left: 10px;top: 4px;">对象属性</span>
+            <span class="fui-export" id="bubblePosition" style="color: darkgrey; padding:5px" title="停靠"></span>
+            <span class="fui-cross" title="关闭" id="close" style="color: darkgrey;padding:5px"></span>
+        </div>
+        <div style="overflow-y:scroll;height:150px" id="tableContainer">
+            <table id="tab"></table>
+        </div>
+    </div>
+
+    <!-- 下一步按钮 -->
+    <button id="btnNextStep" style="position:fixed; top:10px; right:10px; z-index:1000; display:none;">
+        下一步
+    </button>
+
+    <!-- 输入框弹窗 -->
+    <div id="urlInputModal" class="modal-overlay">
+        <div class="wrapper">
+            <h1>请输入数据源信息</h1>
+            <div class="description">
+                默认会加载示例数据
+            </div>
+
+            <div class="input-data">
+                <input type="text" id="modal-url"
+                    value="http://localhost:8090/iserver/services/3D-BIMGongZuoKongJian/rest/realspace" required>
+                <div class="underline"></div>
+                <label>URL地址</label>
+            </div>
+
+            <div class="input-data">
+                <input type="text" id="modal-db" value="QBIM" required>
+                <div class="underline"></div>
+                <label>数据库名称</label>
+            </div>
+
+            <div class="input-data">
+                <input type="text" id="modal-BIM" value="BIM场景" required>
+                <div class="underline"></div>
+                <label>场景名称</label>
+            </div>
+
+            <div class="modal-buttons">
+                <button id="modal-confirm">确认</button>
+                <button id="modal-cancel">取消</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 建设用地面积输入弹窗 -->
+    <div id="landAreaModal" class="modal-overlay">
+        <div class="wrapper">
+            <h1>请输入建设用地面积</h1>
+            <div class="description">
+                用于计算容积率 / 建筑密度 / 绿地率
+            </div>
+
+            <div class="input-data">
+                <input type="number" id="land-area-input" required min="0" step="any">
+                <div class="underline"></div>
+                <label>建设用地面积（m²）</label>
+            </div>
+
+            <div class="modal-buttons">
+                <button id="land-confirm">确认</button>
+                <button id="land-cancel">取消</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 房间面积输入弹窗 -->
+    <div id="roomAreaModal" class="modal-overlay">
+        <div class="wrapper">
+            <h1>请输入房间面积</h1>
+            <div class="description">
+                用于计算通风面积比例
+            </div>
+
+            <div class="input-data">
+                <input type="number" id="room-area-input" required min="0" step="any">
+                <div class="underline"></div>
+                <label>房间面积（m²）</label>
+            </div>
+
+            <div class="modal-buttons">
+                <button id="room-confirm">确认</button>
+                <button id="room-cancel">取消</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PDF 弹窗 -->
+    <div id="overlay">
+        <div class="popup">
+            <div class="popup-header">
+                <span>住宅项目规范文件(2025)</span>
+                <button id="closeBtn" style="border: none; background: none; font-size: 20px;">&times;</button>
+            </div>
+            <div class="popup-body">
+                <iframe src="住宅项目规范.pdf"></iframe>
+            </div>
+        </div>
+    </div>
+
+    <!-- 云层和天空盒 -->
+    <div id="toolbar-sky" class="param-container tool-bar" style="width:400px !important;">
+        <div class="titleBox">
+            <div class="titl">云层与天空盒</div>
+            <span class="close2" aria-hidden="false" style="margin-top: 3px;">x</span>
+        </div>
+        <div class="param-item inputBox">
+            <label class="lable">场景模式</label>
+            <div class="content radio-box">
+                <div style="display: flex;flex-direction: row;margin-right: 28px;">
+                    <input type="radio" name="sceneMode" value="3D" id="mode3d" checked>
+                    <label for="mode3d">三维</label>
+                </div>
+            </div>
+        </div>
+        <div class="param-item inputBox">
+            <label for="openCloud" class="lable">开启云层</label>
+            <input type="checkbox" id="openCloud" class="toggle">
+            <label class="switch"></label>
+        </div>
+        <div class="param-item inputBox showCloud">
+            <label class="lable">切换云层</label>
+            <select id="toggle-sky" style="width:220px;height:25px;border-radius: 4px;">
+                <option value="./images/clouds-supermap-sm.png">云层纹理1</option>
+                <option value="./images/clouds.png">云层纹理2</option>
+            </select>
+        </div>
+        <div class="param-item inputBox showCloud">
+            <label class="lable">云层速度</label>
+            <div class="rangeBox">
+                <input type="range" data-bind="value: cloudSpeed,valueUpdate: 'input'" id="cloudSpeed" min="-2.0"
+                    max="2.0" value="1.0" step="0.5" style="width: 170px;margin-left:7px;">
+                <p id="speedText" style="display: inline-block;font-size: 14px;margin-left: 2px;">1.0</p>
+            </div>
+        </div>
+        <div class="param-item inputBox">
+            <label class="lable" for="openSkybox">开启天空盒</label>
+            <input type="checkbox" id="openSkybox" class="toggle" style="top: 12em;">
+            <label class="switch"></label>
+        </div>
+        <div class="param-item inputBox showSky">
+            <label class="lable">纹理模式</label>
+            <div class="content radio-box">
+                <div style="display: flex;flex-direction: row;margin-right: 28px;">
+                    <input type="radio" name="textureMode" value="cubicSheet" id="cubicSheet">
+                    <label for="cubicSheet" style="width: 60px;">立方面片</label>
+                </div>
+                <div style="display: flex;flex-direction: row;margin-right: 15px;">
+                    <input type="radio" name="textureMode" value="panorama" id="panorama" checked>
+                    <label for="panorama" style="width: 60px;">全景图</label>
+                </div>
+            </div>
+        </div>
+        <div class="param-item inputBox showSky">
+            <label class="lable">天空盒纹理</label>
+            <select id="toggle-skyBox" style="width:220px;height:25px;border-radius: 4px;">
+            </select>
+        </div>
+        <div class="param-item inputBox showSky">
+            <label class="lable">天空盒旋转</label>
+            <div class="rangeBox">
+                <input type="range" data-bind="value: skyRotate,valueUpdate: 'input'" id="skyRotate" min="0.0"
+                    max="360.0" value="0.0" step="1.0" style="width: 170px;margin-left:7px;">
+                <p style="display: inline-block;font-size: 14px;margin-left: 2px;">360°</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 光照分析 -->
+    <div id='toolbar' style="position: absolute;left: 5px;top: 5px;display: none;">
+        <div class="titleBox">
+            <div class="titl">日照分析</div>
+            <span class="close2" aria-hidden="false">x</span>
+        </div>
+        <div class="inputBox">
+            <label class="lab">日期选择</label>
+            <input id="selDate" type="date" style="width: 206px; margin-bottom: 0px;color:white;" />
+        </div>
+        <div class="inputBox">
+            <label class="lab" for="startTime">开始时间</label>
+            <select id="startTime" class="selectstyle">
+                <option value="0">0:00</option>
+                <option value="2">2:00</option>
+                <option value="4">4:00</option>
+                <option value="6">6:00</option>
+                <option value="8">8:00</option>
+                <option value="10" selected>10:00</option>
+                <option value="12">12:00</option>
+                <option value="14">14:00</option>
+                <option value="16">16:00</option>
+                <option value="18">18:00</option>
+                <option value="20">20:00</option>
+                <option value="22">22:00</option>
+            </select>
+        </div>
+        <div class="inputBox">
+            <label class="lab" for="endTime">结束时间</label>
+            <select id="endTime" class="selectstyle">
+                <option value="2">2:00</option>
+                <option value="4">4:00</option>
+                <option value="6">6:00</option>
+                <option value="8">8:00</option>
+                <option value="10">10:00</option>
+                <option value="12">12:00</option>
+                <option value="14">14:00</option>
+                <option value="16">16:00</option>
+                <option value="18" selected>18:00</option>
+                <option value="20">20:00</option>
+                <option value="22">22:00</option>
+                <option value="24">24:00</option>
+            </select>
+        </div>
+
+        <div class="inputBox" style="display: flex;">
+            <label class="lab">显示模式</label>
+            <div class="content radio-box">
+                <div style="display: flex;flex-direction: row;margin-right: 28px;align-items: center;">
+                    <input type="radio" name="displayType" value="0" id="sunLight" checked>
+                    <label for="sunLight">日照</label>
+                </div>
+                <div id="img-container" style="top: -2px;left: -25px;">
+                    <img src="./images/iconTip/down.png" title="日照累计时长">
+                </div>
+                <div style="display: flex;flex-direction: row;margin-right: 28px;align-items: center;">
+                    <input type="radio" name="displayType" value="1" id="shadow">
+                    <label for="shadow">阴影</label>
+                </div>
+                <div id="img-container" style="top: -2px;right: 25px;">
+                    <img src="./images/iconTip/down.png" title="阴影累计时长">
+                </div>
+            </div>
+        </div>
+
+        <div class="inputBox" id="colortable-box" style="display: flex;">
+            <label class="lab" for="colorTable">颜色表</label>
+            <div class="element" id="colorTable" title="设置颜色表" style="margin-left: 5px;">
+                <select class="selectpicker">
+                    <option value="4"
+                        data-content="<span class='label band4' style='top:-2px'>&nbsp</span>&nbsp</span>">&nbsp
+                    </option>
+                    <option value="1"
+                        data-content="<span class='label band1' style='top:-2px'>&nbsp</span>&nbsp</span>">&nbsp
+                    </option>
+                    <option value="2"
+                        data-content="<span class='label band2' style='top:-2px'>&nbsp</span>&nbsp</span>">&nbsp
+                    </option>
+                    <option value="3"
+                        data-content="<span class='label band3' style='top:-2px'>&nbsp</span>&nbsp</span>">&nbsp
+                    </option>
+                    <option value="5"
+                        data-content="<span class='label band5' style='top:-2px'>&nbsp</span>&nbsp</span>">&nbsp
+                    </option>
+                </select>
+            </div>
+        </div>
+
+        <div class="inputBox" id="color-box" style="display: none;">
+            <label class="lab" for="colorTable">颜色设置</label>
+            <input class="colorPicker content" id="colorPicker">
+        </div>
+
+        <div class="inputBox">
+            <label class="lab">最远距离</label>
+            <div class="rangeBox">
+                <input type="range" id="maxDistance" min="10" max="3000" value="2000" step="10">
+            </div>
+            <input type="text" id="maxDistance_input" size="5" value="2000（米）" style="color: #ffffff;margin-top: 3px;">
+        </div>
+
+        <div style="margin: 0 0 12px 110px;">
+            <button type="button" id="shadowAnalysis" class="btn_foot"
+                style=" background:rgba(52,153,229,1);">分析</button>
+            <button type="button" id="clear" class="btn_foot"
+                style="border: 1px solid rgba(255, 255, 255, .65);color:rgba(255, 255, 255, .65)">清除</button>
+        </div>
+
+        <div class="legend-toolbar">
+            <p>日照分析模式下统计时长情况</p>
+            <div id="color-legend">
+                <div class="color-legend-label"> > <span id="top">7</span>小时</div>
+                <br />
+                <div class="color-legend-label"> = <span id="middle">5</span>小时</div>
+                <br />
+                <div class="color-legend-label" style="margin-top:-2px;">
+                    < <span id="bottom">2</span>小时
+                </div>
+            </div>
+
+            <p>
+                提示：鼠标悬浮获取日照时长
+            </p>
+        </div>
+    </div>
+
+    <!-- 智能化评估功能 -->
+    <div class="modal" id="SmartModal">
+        <div class="modal-header">
+            <span class="modal-title">建筑智能化评估</span>
+            <span class="close-btn" id="closeBtn">&times;</span>
+        </div>
+        <div class="modal-content">
+            <div class="switch-container">
+                <label class="switch-label">是否有入户光纤: </label>
+                <label class="switch">
+                    <input type="checkbox" class="switch-input" id="guangxianSwitch">
+                    <span class="switch-slider"></span>
+                </label>
+            </div>
+            <div class="switch-container">
+                <label class="switch-label">是否有移动通信信号:</label>
+                <label class="switch">
+                    <input type="checkbox" class="switch-input" id="WIFISwitch">
+                    <span class="switch-slider"></span>
+                </label>
+            </div>
+            <div class="switch-container">
+                <label class="switch-label">是否有有线电视系统:</label>
+                <label class="switch">
+                    <input type="checkbox" class="switch-input" id="TVSwitch">
+                    <span class="switch-slider"></span>
+                </label>
+            </div>
+            <div class="switch-container">
+                <label class="switch-label">是否有家居配线箱:</label>
+                <label class="switch">
+                    <input type="checkbox" class="switch-input" id="peixianxiangSwitch">
+                    <span class="switch-slider"></span>
+                </label>
+            </div>
+            <div class="switch-container">
+                <label class="switch-label">紧急状况下门禁是否可以从内侧打开:</label>
+                <label class="switch">
+                    <input type="checkbox" class="switch-input" id="doorSwitch">
+                    <span class="switch-slider"></span>
+                </label>
+            </div>
+            <div class="submitsmart-container">
+                <button class="submitsmart-btn">提交</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://o.alicdn.com/appflow/chatbot/v1/AppflowChatSDK.js"></script>
+    <script>
+        window.APPFLOW_CHAT_SDK.init({
+            integrateConfig: {
+                integrateId: 'cit-4185b554385f4eb19bd1',
+                domain: {
+                    requestDomain: 'https://1915654578465554.appflow.aliyunnest.com'
+                }
+            }
+        });
+    </script>
+    <script src="https://unpkg.com/@turf/turf@6/turf.min.js"></script>
+
+
+    <script>
+        //提示弹窗
+        (function () {
+            // 页面加载完成后执行
+            window.addEventListener('load', () => {
+                // 创建遮罩
+                const mask = document.createElement('div');
+                mask.id = 'gb55038-mask';
+                Object.assign(mask.style, {
+                    position: 'fixed',
+                    inset: 0,
+                    background: 'rgba(0,0,0,.55)',
+                    zIndex: 9999,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                });
+
+                // 创建弹窗内容
+                const box = document.createElement('div');
+                box.id = 'gb55038-modal';
+                Object.assign(box.style, {
+                    background: '#fff',
+                    borderRadius: 8,
+                    maxWidth: 480,
+                    padding: '24px 32px 32px',
+                    textAlign: 'center',
+                    fontFamily: '-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial',
+                    lineHeight: 1.65,
+                    boxShadow: '0 10px 40px rgba(0,0,0,.3)',
+                    fontSize: '25px' // ← 就在这里增大字体大
+                });
+
+                box.innerHTML = `
+      <h3 style="margin:0 0 8px;font-size:20px;color:#111">系统提示</h3>
+      <p style="margin:0 0 16px;font-size:15px;color:#333;white-space:normal;word-break:break-word;">
+  在国家推动城市高质量发展的大背景下，为响应《中共中央国务院关于推动城市高质量发展的意见》<br>（2025年8月15日），以及住房和城乡建设部提出的好房子标准，本系统应运而生。<br>
+  <strong>《住宅项目规范》GB 55038-2025</strong>（<strong>住建部</strong> 2025-03-31 发布，2025-05-01 实施）首次将“好房<br>子”定义为<strong>安全、舒适、绿色、智慧</strong>四个维度，旨在提升住房质量与人文品质，满足人民群众对美<br>好生活的向往。本系统严格依据上述规范，通过数字化技术，为建筑设计、施工、运维和更新提供<br>全生命周期服务，助力实现住房的高质量发展。
+</p>
+
+      <div>
+        <button id="gb55038-close" style="margin-right:12px;padding:8px 24px;border:none;border-radius:4px;background:#007bff;color:#fff;font-size:14px;cursor:pointer">我已知晓</button>
+        <a id="gb55038-link" href="https://www.gov.cn/zhengce/zhengceku/202504/content_7016620.htm" target="_blank" style="padding:8px 24px;border:1px solid #007bff;border-radius:4px;background:#fff;color:#007bff;font-size:14px;text-decoration:none">查看官方全文</a>
+      </div>
+    `;
+
+                mask.appendChild(box);
+                document.body.appendChild(mask);
+
+                // 关闭弹窗
+                document.getElementById('gb55038-close').addEventListener('click', () => {
+                    document.body.removeChild(mask);
+                });
+            });
+        })();
+
+        //示例数据
+        let Qurl = 'http://localhost:8090/iserver/services/3D-BIMGongZuoKongJian/rest/realspace';
+        let Qdb = 'DataSource';
+        let QBIM = 'BIM场景';
+        let viewer, scene;
+        let leidatexiao;
+        let ceshi;
+        let qihouquyu;
+        let xiangaofenxikangti;
+        let fenceEnt;
+
+
+        //输出报告存储变量
+        let woshicenggao_result;
+        let woshicenggao_txt;
+        let gongonglouti_result;
+        let gongonglouti_txt;
+        let gongonglouti_txt1;
+        let fanghulan_result;
+        let fanghulan_txt;
+        let louban_result;
+        let louban_txt;
+        let louban_txt1;
+        let shineidimiangaocha_result;
+        let shineidimaingaocha_txt;
+        let shineidimaingaocha_txt1;
+        let tongfengmianji_result;
+        let tongfengmianji_txt;
+
+        function onload(SuperMap3D) {
+            // 通过config.js中的getEngineType,获取引擎类型（EngineType）用于设置启动方式
+            var EngineType = getEngineType();
+            viewer = new SuperMap3D.Viewer('Container', {
+                contextOptions: {
+                    contextType: Number(EngineType), // Webgl2:2 ; WebGPU:3
+                }
+            });
+
+            viewer.scenePromise.then(function (scene) {
+                init1(SuperMap3D, scene, viewer);
+                //  init(SuperMap3D, scene, viewer);
+            });
+        }
+
+        function init(SuperMap3D, scene, viewer) {
+            // viewer.resolutionScale = window.devicePixelRatio;//分辨率尺度
+            $('#loadingbar').remove();
+            // $('#selDate').val(getRealTimeDate());
+
+            viewer.resolutionScale = window.devicePixelRatio;
+            var scene = viewer.scene;
+            var imageryLayers = viewer.imageryLayers;
+            var baseLayer = imageryLayers.get(0);
+            scene.camera.frustum.near = 0.01;
+            var widget = viewer.Widget;
+            var infoboxContainer = document.getElementById("bubble");
+            viewer.customInfobox = infoboxContainer;
+            var list;
+
+            //#region交互查询
+            viewer.camera.flyTo({
+                destination: new SuperMap3D.Cartesian3.fromDegrees(113.885193, 22.501787, 57.26),
+                orientation: {
+                    heading: SuperMap3D.Math.toRadians(359.47030876673165),
+                    pitch: SuperMap3D.Math.toRadians(-11.566762024736574),
+                    roll: 1.5527111732780564e-8
+                }
+            });
+
+            function range(startID, endID) {
+                var array = [];
+                for (var i = startID; i < endID + 1; i++) {
+                    array.push(i);
+                }
+                return array;
+            }
+            //   var url = 'http://localhost:8090/iserver/services/3D-BIMGongZuoKongJian/rest/realspace';
+
+            shujukudizhi = Qurl.replace('3D', 'data').replace(/realspace(?=\/?$)/, 'data');
+            try {
+                //场景添加S3M图层服务
+                var promise = scene.open(Qurl);
+                SuperMap3D.when(promise, function (layers) {
+                    //#region雷达查询特效
+                    specialEffects();
+                    leidatexiao = viewer.entities.add({
+                        name: "中服大厦",
+                        position: new SuperMap3D.Cartesian3.fromDegrees(113.8851947387825, 22.502916771317853, 0),
+                        ellipse: {
+                            height: 20, // 线圈的高度
+                            semiMinorAxis: 30, // 线圈的横向长度
+                            semiMajorAxis: 30, // 线圈的竖向长度
+                            material: new SuperMap3D.CircleWaveMaterialProperty(
+                                SuperMap3D.Color.fromCssColorString("rgba(1, 213, 222, 0.6)"),
+                                5000,
+                                1,
+                                0
+                            ), // 第一个参数是线圈的颜色，第二个参数是线圈的个数
+                        },
+                    });
+                    leidatexiao.show = false;
+                    //#endregion
+
+                    //#region光照分析
+                    var bablePosition = undefined;
+                    var bableDom = document.getElementById("shadowRadioBox");
+                    var tooltip = createTooltip(document.body);
+                    var colorTable = undefined;
+                    var mode1 = 0;
+
+                    $('#selDate').val(getRealTimeDate());
+                    $('#loadingbar').remove();
+
+                    let baiMoLayer = layers[0];
+                    baiMoLayer.shadowType = 2;
+                    let baiMoLayer1 = layers[1];
+                    baiMoLayer1.shadowType = 2;
+
+                    baiMoLayer.style3D.fillStyle = SuperMap3D.FillStyle.Fill_And_WireFrame;
+                    baiMoLayer.style3D.lineColor = SuperMap3D.Color.fromCssColorString('rgb(67,67,67)');
+
+                    var sunLightAnalysis = scene.sunlightAnalysis;
+                    sunLightAnalysis.displayMode = 0;
+                    var dateValue = $("#selDate").val();
+                    var startTime = new Date(dateValue);
+                    startTime.setHours(Number($("#startTime :selected").val()));
+                    sunLightAnalysis.startTime = SuperMap3D.JulianDate.fromDate(startTime);
+
+                    var endTime = new Date(dateValue);
+                    endTime.setHours(Number($("#endTime :selected").val()));
+                    sunLightAnalysis.endTime = SuperMap3D.JulianDate.fromDate(endTime);
+                    $('#selDate').val(new Date().getFullYear() + '-01-20');
+                    $('#startTime').val(8);
+                    $('#endTime').val(16);
+
+
+                    var handler = new SuperMap3D.ScreenSpaceEventHandler(scene.canvas);
+                    handler.setInputAction(function (e) {
+                        if (!sunLightAnalysis.enabled) {
+                            return;
+                        }
+
+                        var posWC = e.endPosition || e.position;
+
+                        sunLightAnalysis.getDurationAsync(posWC).then(function (seconds) {
+                            var miniutes = Math.floor(seconds / 60);
+                            var hours = Math.floor(miniutes / 60);
+                            miniutes = miniutes % 60;
+
+                            if (seconds != -1) {
+                                if (Number(mode1) == 0) {
+                                    tooltip.showAt(posWC, `<p>日照时长：${hours} 小时 ${miniutes} 分</p>`);
+                                } else {
+                                    tooltip.showAt(posWC, `<p>阴影时长：${hours} 小时 ${miniutes} 分</p>`);
+                                }
+                            }
+                        });
+                    }, SuperMap3D.ScreenSpaceEventType.MOUSE_MOVE);
+
+                    // 更新图例
+                    function updateLegendHours(startHour, endHour) {
+                        if (startHour == 10 && endHour == 18) {
+                            $('#top').text(7);
+                            $('#middle').text(5);
+                            $('#bottom').text(2);
+                            return;
+                        }
+                        if (startHour && endHour) {
+                            let dValue = ((endHour - startHour) / 4).toFixed(1);
+                            $('#top').text(dValue * 3);
+                            $('#middle').text(dValue * 2);
+                            $('#bottom').text(dValue);
+                        }
+                    }
+
+                    let curStartTime = 10;
+                    let curEndTime = 18;
+                    function checkTime(startHour, endHour) {
+                        if (startHour >= endHour) {
+                            $("#startTime").val(`${curStartTime}`);
+                            $("#endTime").val(`${curEndTime}`);
+                            alert('开始时间不得大于结束时间，请重新选择');
+                            return false;
+                        } else {
+                            return true;
+                        }
+                    }
+
+                    // 选择时间
+                    $('#startTime').change(function () {
+                        var startTime = new Date($("#selDate").val());
+                        var startHour = Number($(this).val());
+                        var endHour = Number($("#endTime :selected").val());
+
+                        let checked = checkTime(startHour, endHour);
+                        if (checked) {
+                            startTime.setHours(startHour);
+                            sunLightAnalysis.startTime = SuperMap3D.JulianDate.fromDate(startTime);
+                            updateLegendHours(startHour, endHour);
+                            curStartTime = startHour;
+                            curEndTime = endHour;
+                        }
+
+                    });
+                    $('#endTime').change(function () {
+                        var endTime = new Date($("#selDate").val());
+                        var endHour = Number($(this).val());
+                        var startHour = Number($("#startTime :selected").val());
+
+                        let checked = checkTime(startHour, endHour);
+                        if (checked) {
+                            endTime.setHours(endHour);
+                            sunLightAnalysis.endTime = SuperMap3D.JulianDate.fromDate(endTime);
+                            updateLegendHours(startHour, endHour);
+                            curStartTime = startHour;
+                            curEndTime = endHour;
+                        }
+                    });
+
+                    // 选择模式
+                    $('#sunLight').click(function () {
+                        mode1 = $('#sunLight').val();
+                        //  sunLightAnalysis.displayMode = parseInt(mode1);
+                        sunLightAnalysis.displayMode = 0;
+                        $("#infoText").text("日照时长");
+                        $("#color-box").hide();
+                        $("#colortable-box").show();
+                        var value = $("#colorTable").find("option:selected")[0].value;
+                        if (Number(value) == 4) {
+                            $(".legend-toolbar").show();
+                        } else {
+                            $(".legend-toolbar").hide();
+                        }
+                    });
+                    $('#shadow').click(function () {
+                        mode1 = $('#shadow').val();
+                        sunLightAnalysis.displayMode = parseInt(mode1);
+                        $("#infoText").text("阴影时长");
+                        $("#color-box").show();
+                        $("#colortable-box").hide();
+                        $(".legend-toolbar").hide();
+                    });
+
+                    // 移入工具栏关闭toolTip
+                    $('#toolbar').mouseenter(function () {
+                        tooltip.setVisible(false);
+                    });
+                    $('#toolbar').mouseleave(function () {
+                        if (sunLightAnalysis.enabled) {
+                            tooltip.setVisible(true);
+                        }
+                    });
+
+                    // 颜色选择器
+                    $("#colorPicker").spectrum({
+                        color: "rgba(0,0,255,1)",
+                        showPalette: true,
+                        showAlpha: true,
+                        localStorageKey: "spectrum.demo",
+                        preferredFormat: 'rgb'
+                    });
+                    $("#colorPicker").on('change', function (event) {
+                        var selectColor = new SuperMap3D.Color.fromCssColorString(event.target.value);
+                        sunLightAnalysis.visualizationColor = selectColor;
+                    });
+
+                    // 颜色表
+                    $('#colorTable').change(function () {
+                        colorTable = new SuperMap3D.ColorTable();
+                        var value = $("#colorTable").find("option:selected")[0].value;
+                        setColorTable(colorTable, value);
+                        sunLightAnalysis.setColorTable(colorTable);
+
+                        if (Number(value) == 4) {
+                            $(".legend-toolbar").show();
+                        } else {
+                            $(".legend-toolbar").hide();
+                        }
+                    });
+
+                    // 日照分析最远距离
+                    $('#maxDistance').mousemove(function () {
+                        var val = $('#maxDistance').val();
+                        $('#maxDistance_input').val(`${val}（米）`);
+                        if (sunLightAnalysis._shadowMap) sunLightAnalysis._shadowMap.maximumDistance = Number(val);
+                    });
+
+                    // 开始分析
+                    $('#shadowAnalysis').click(function () {
+                        // if (sunLightAnalysis._shadowMap) sunLightAnalysis._shadowMap.maximumDistance = 100;
+                        if (colorTable) sunLightAnalysis.setColorTable(colorTable);
+                        sunLightAnalysis.run();
+                    });
+
+                    // 清除
+                    $('#clear').click(function () {
+                        sunLightAnalysis.clear();
+                        tooltip.setVisible(false);
+                    });
+
+
+                    // 设置颜色表
+                    function setColorTable(colorTable, key) {
+                        switch (key) {
+                            case "1":
+                                colorTable.insert(0, new SuperMap3D.Color(0, 39 / 255, 148 / 255));
+                                colorTable.insert(1, new SuperMap3D.Color(149 / 255, 232 / 255, 249 / 255));
+                                break;
+                            case "2":
+                                colorTable.insert(0, new SuperMap3D.Color(162 / 255, 251 / 255, 194 / 255));
+                                colorTable.insert(1, new SuperMap3D.Color(1, 103 / 255, 103 / 255));
+                                break;
+                            case "3":
+                                colorTable.insert(0, new SuperMap3D.Color(230 / 255, 198 / 255, 1));
+                                colorTable.insert(1, new SuperMap3D.Color(157 / 255, 0, 1));
+                                break;
+                            case "4":
+                                colorTable.insert(0, new SuperMap3D.Color(0, 0, 1, 1));
+                                colorTable.insert(0.4, new SuperMap3D.Color(0, 0, 1, 1));
+                                colorTable.insert(0.6, new SuperMap3D.Color(0, 1, 1, 1));
+                                colorTable.insert(0.8, new SuperMap3D.Color(1, 1, 0, 1));
+                                colorTable.insert(1, new SuperMap3D.Color(1, 0, 0, 1));
+                                break;
+                            case "5":
+                                colorTable.insert(0, new SuperMap3D.Color(186 / 255, 1, 229 / 255));
+                                colorTable.insert(1, new SuperMap3D.Color(26 / 255, 185 / 255, 156 / 255));
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+
+
+                    // 获取当前系统日期
+                    function getRealTimeDate() {
+                        var currentDate = new Date();
+                        var day = currentDate.getDate(); //获取天
+                        var month = currentDate.getMonth() + 1; // 获取月
+                        var year = currentDate.getFullYear(); // 获取年份
+
+                        // 补零操作
+                        day = (day < 10 ? "0" : "") + day;
+                        month = (month < 10 ? "0" : "") + month;
+
+                        // 构建格式化日期字符串
+                        var realTimeDate = year + "-" + month + "-" + day;
+                        return realTimeDate;
+                    }
+                    //#endregion光照分析
+
+                    var layer = scene.layers.find(QBIM);
+                    //读取子图层信息，通过数组的方式返回子图层的名称以及子图层所包含的对象的IDs
+                    layer.setQueryParameter({
+                        url: shujukudizhi,
+                        dataSourceName: Qdb,
+                        isMerge: true
+                    });
+                    datainfo(layer);//QBIM
+                    scene.addS3MTilesLayerByScp(
+                        'http://localhost:8090/iserver/services/3D-BIMGongZuoKongJian/rest/realspace/datas/BIM%E5%9C%BA%E6%99%AF/config',
+                        { name: '裁剪线白膜' }
+                    ).then(layer1 => {
+                        layer1.visible = false;   // 加载完成后立即隐藏
+                    });
+                    // 初始化选中颜色
+                    var color = new SuperMap3D.Color.fromCssColorString("rgba(23,92,239,0.5)");
+                    layer.selectedColor = color;
+
+                    // 用户自定义选中颜色
+                    SuperMap3D.knockout.getObservable(viewModel, 'material').subscribe(
+                        function (newValue) {
+                            var color = SuperMap3D.Color.fromCssColorString(newValue);
+                            layer.selectedColor = color;
+                        }
+                    );
+                    //通过服务地址得到子图层信息
+                    //uncheck子节点递归函数
+                    function changeNodeToUnchecked(node) {
+                        if (!node.hasOwnProperty('nodes')) {
+                            $tree.treeview('uncheckNode', [node.nodeId, { slient: true }]);
+                            return;
+                        }
+                        if (node.hasOwnProperty('nodes') && node.nodes.length > 0) {
+                            for (var i = 0; i < node.nodes.length; i++) {
+                                changeNodeToUnchecked(node.nodes[i]);
+                            }
+                        }
+                        $tree.treeview('uncheckNode', [node.nodeId, { slient: true }]);
+                    };
+                    //check子节点的递归函数
+                    function changeNodeToChecked(node) {
+                        if (!node.hasOwnProperty('nodes')) {
+                            if (!node.state.checked) {
+                                $tree.treeview('checkNode', [node.nodeId, { slient: true }]);
+                            }
+                            return;
+                        }
+                        if (node.hasOwnProperty('nodes') && node.nodes.length > 0) {
+                            for (var i = 0; i < node.nodes.length; i++) {
+                                changeNodeToChecked(node.nodes[i]);
+                            }
+                        }
+                        if (!node.state.checked) {
+                            $tree.treeview('checkNode', [node.nodeId, { slient: true }]);
+                        }
+
+                    };
+                    //本级节点全部勾选后，勾选上级父节点
+                    function checkSiblingNode(node) {
+                        //检查兄弟节点信息
+                        var sibArr = $tree.treeview('getSiblings', node);
+                        var allCheck = true;
+                        if (sibArr.length > 0) {
+                            for (var i = 0; i < sibArr.length; i++) {
+                                if (!sibArr[i].state.checked) {
+                                    allCheck = false;
+                                    break;
+                                }
+                            }
+                        }
+                        //兄弟节点都已选中后勾选父节点
+                        if (allCheck && (node.hasOwnProperty('parentId') && !$tree.treeview('getNode', node.parentId).state.checked)) {
+                            $tree.treeview('checkNode', [node.parentId, { slient: true }]);
+                        }
+                    };
+                    //初始化树形菜单
+                    var $tree = $('#layerTree').treeview({
+                        data: [{ text: "图层列表", selectable: false }],
+                        showIcon: false,
+                        showCheckbox: true,
+                        backColor: 'transparent',
+                        color: '#fff',
+                        //通过NodeChecked状态设置子图层的显示与隐藏的切换
+                        onNodeChecked: function (evt, node) {
+                            var ids = [];
+                            for (var i = 0; i < list.length; i++) {
+                                if (list[i].datasetName == node.text) {
+                                    ids = range(list[i].startID, list[i].endID);
+                                    break;
+                                }
+                            }
+                            if (ids.length > 0) {
+                                layer.visible = true;
+                                layer.setOnlyObjsVisible(ids, true);
+                            }
+                            else if (node.text == "影像图层" || node.text == "BingMap") {
+                                baseLayer.show = true;
+                            }
+                            else {
+                                layer.visible = true;
+                            }
+                            checkSiblingNode(node);
+                            changeNodeToChecked(node);
+
+                        },
+                        onNodeUnchecked: function (evt, node) {
+                            var ids = [];
+                            for (var i = 0; i < list.length; i++) {
+                                if (list[i].datasetName == node.text) {
+                                    ids = range(list[i].startID, list[i].endID);
+                                    break;
+                                }
+                            }
+                            if (ids.length > 0) {
+                                // layer.removeAllObjsColor();
+                                layer.setOnlyObjsVisible(ids, false);
+                            }
+                            else if (node.text == "影像图层" || node.text == "BingMap") {
+                                baseLayer.show = false;
+                            }
+                            else {
+                                layer.visible = false;
+                            }
+                            if (!node.state.checked) {
+                                changeNodeToUnchecked(node);
+                            }
+                        },
+                        //节点被选中时，设该子图层颜色为半透明
+                        onNodeSelected: function (evt, node) {
+
+                            var ids = [];
+                            for (var i = 0; i < list.length; i++) {
+                                if (list[i].datasetName == node.text) {
+                                    ids = range(list[i].startID, list[i].endID);
+                                }
+                            }
+                            if (ids.length > 0) {
+                                layer.releaseSelection();
+                                layer.setSelection(ids);
+                            }
+                            else {
+                                layer.removeAllObjsColor();
+                            }
+                        },
+                        onNodeUnselected: function (evt, node) {
+                            for (var i = 0; i < list.length; i++) {
+                                if (list[i].datasetName == node.text) {
+                                    layer.releaseSelection();
+                                }
+                            }
+                        }
+
+                    });
+                    var rootNode = $tree.treeview('getNode', 0);
+                    //加载图层
+                    var S3MNode = $tree.treeview('addNode', [rootNode, { text: "S3M图层", showDel: true, fontSize: '10pt', state: { checked: true }, selectable: false }]);
+                    var childNode = $tree.treeview('addNode', [S3MNode, { text: layer._name, showDel: true, fontSize: '10pt', state: { checked: true }, selectable: false }]);
+                    //加载子图层
+                    function datainfo(layer) {
+                        layer.datasetInfo().then(function (result) {
+                            list = result;
+                            console.log(list);
+                            if (list.length > 0) {
+                                for (var i = 0; i < list.length; i++) {
+                                    $tree.treeview('addNode', [childNode, { text: list[i].datasetName, showDel: true, fontSize: '10pt', state: { checked: true } }]);
+                                }
+                            }
+                        });
+                    }
+                    layer.removeObjsColor(arr);
+
+
+                    // 过滤指定透明度一下的要素，选择其后的要素
+                    layer.selectionFiltrateByTransparency = 0;
+                    $("#select-filter-alpha").on('input propertychange', function () {
+                        layer.selectionFiltrateByTransparency = Number($("#select-filter-alpha").val());
+                    });
+                }, function (e) {
+                    if (widget._showRenderLoopErrors) {
+                        var title = '加载SCP失败，请检查网络连接状态或者url地址是否正确？';
+                        widget.showErrorPanel(title, undefined, e);
+                    }
+                });
+            }
+            catch (e) {
+                if (widget._showRenderLoopErrors) {
+                    var title = '渲染时发生错误，已停止渲染。';
+                    widget.showErrorPanel(title, undefined, e);
+                }
+            }
+            //点击对象查询对象属性
+            var table = document.getElementById("tab");
+            viewer.pickEvent.addEventListener(function (feature) {
+                $("#bubble").show();
+                for (i = table.rows.length - 1; i > -1; i--) {
+                    table.deleteRow(i);
+                }
+                const whiteList = new Set([
+                    "SMID", "SMMAXZ", "SMMINZ", "类别", "体积", "面积",
+                    "标高", "顶高度", "底高度", "周长", "厚度"
+                ]);
+                const banList = new Set(["ELEMENTID", "CATEGORYID", "类型_ID"]);
+                for (const key in feature) {
+                    const value = String(feature[key]);
+                    // 长度过滤
+                    if (banList.has(key)) continue;
+                    if (!(whiteList.has(key) || (value.length >= 6 && value.length <= 20))) continue;
+                    // 不在白名单 → 仍然保留；在白名单 → 也保留
+                    const row = table.insertRow();
+                    row.insertCell().textContent = key;
+                    row.insertCell().textContent = value;
+                }
+            });
+
+            /*  viewer.customInfobox = undefined;
+             $("#bubble").removeClass("bubble").addClass("float");
+             $("#bubblePosition").removeClass("fui-export").addClass("fui-bubble");
+             $("#bubblePosition")[0].title = "悬浮";
+             $("#bubble").css({ 'left': '80%', 'bottom': '35%' });
+             $("#tableContainer").css({ 'height': '350px' }); */
+            $('#loadingbar').remove();
+            var viewModel = {
+                material: '#ffffff',
+            };
+            $("#colorPicker").spectrum({
+                color: "rgba(23,92,239,0.5)",
+                showPalette: true,
+                showAlpha: true,
+                localStorageKey: "spectrum.demo",
+                preferredFormat: 'rgb'
+            });
+            SuperMap3D.knockout.track(viewModel);
+            var toolbar = document.getElementById('colorBtn');
+            SuperMap3D.knockout.applyBindings(viewModel, toolbar);
+
+            $("#bubblePosition").click(function () {
+                if ($("#bubblePosition").hasClass("fui-export")) {
+                    viewer.customInfobox = undefined;
+                    $("#bubble").removeClass("bubble").addClass("float");
+                    $("#bubblePosition").removeClass("fui-export").addClass("fui-bubble");
+                    $("#bubblePosition")[0].title = "悬浮";
+                    $("#bubble").css({ 'left': '80%', 'bottom': '35%' });
+                    $("#tableContainer").css({ 'height': '350px' });
+                }
+                else if ($("#bubblePosition").hasClass("fui-bubble")) {
+                    $("#bubble").removeClass("float").addClass("bubble");
+                    $("#bubblePosition").removeClass("fui-bubble").addClass("fui-export");
+                    $("#bubblePosition")[0].title = "停靠";
+                    $("#tableContainer").css({ 'height': '150px' });
+                    viewer.customInfobox = infoboxContainer;
+                }
+            });
+            $("#close").click(function () {
+                $("#bubble").hide();
+            });
+
+            //图层列表的隐藏显示
+            $(document).on('click.dropDown-container touchstart.dropDown-container', '[data-toggle=dropdown]', function (evt) {
+                evt.stopPropagation();
+                var target = evt.target;
+                if (!target.contains(evt.currentTarget) && target.tagName != 'SPAN') {
+                    return;
+                }
+                var $this = $(this), $parent, isActive;
+                var $target = $this.children('div.dropDown-container');
+                if ($target.length == 0) {
+                    $('.dropDown-container').removeClass('dropDown-visible');
+                    return;
+                }
+                isActive = $target.hasClass('dropDown-visible');
+                $('.dropDown-container').removeClass('dropDown-visible');
+                if (!isActive) {
+                    $target.addClass('dropDown-visible');
+                }
+                return false;
+            });
+            var height = $('body').height() * 0.85 + 'px';
+            $('#treeContainer').css({ 'height': height, 'min-width': '260px', 'text-align': 'left' });
+            //#endregion
+
+            //  部分专题功能
+            //#region  5% 通风面积验算（分两步选窗）1
+            let ventMode = false;   // 是否处于选窗状态
+            let step = 0;       // 0 未开始 1 选双单平开窗 2 选单扇平开窗
+            let totalDouble = 0;      // 双单平开窗累计面积
+            let totalSingle = 0;      // 单扇平开窗累计面积
+            const consoleOut = document.getElementById('console');
+            const ventBtn = document.getElementById('ventilationarea-control');
+
+            //通用拾取回调
+            function onVentPick(feature) {
+                if (!ventMode) return;
+
+                const winType = String(feature['类型'] || '');
+                let area = 0;
+
+                /* 1) 形如 2700x2450_700_600_铝合金 或 600x1550_铝合金 */
+                const m1 = winType.match(/_(\d+)_(\d+)_/);   // 700_600
+                const m2 = winType.match(/^(\d+)x(\d+)_/);   // 600x1550
+
+                if (m1) {
+                    const [, w, h] = m1;
+                    area = Number(w) * Number(h) / 1_000_000;
+                } else if (m2) {
+                    const [, w, h] = m2;
+                    area = Number(w) * Number(h) / 1_000_000;
+                } else {
+                    /* 2) 其它类型直接读“面积”字段 */
+                    area = Number(feature['面积']) || 0;
+                }
+
+                // 计算完面积后，如果是双单平开窗，直接翻倍
+                if (step === 1) area *= 2;   // ← 新增
+
+                // 后面的累加、输出保持不变
+                if (step === 1) {
+                    totalDouble += area;
+                    consoleOut.append(`[${new Date().toLocaleTimeString()}] [双单] 计算面积：${area.toFixed(2)} m²，累计：${totalDouble.toFixed(2)} m²`);
+                } else if (step === 2) {
+                    totalSingle += area;
+                    consoleOut.append(`[${new Date().toLocaleTimeString()}] [单扇] 计算面积：${area.toFixed(2)} m²，累计：${totalSingle.toFixed(2)} m²`);
+                }
+                consoleOut.appendChild(document.createElement('br'));
+            }
+
+            /* 结束当前步骤并进入下一步 */
+            function nextStep() {
+                viewer.pickEvent.removeEventListener(onVentPick);
+                if (step === 1) {
+                    step = 2;
+                    consoleOut.append(`[${new Date().toLocaleTimeString()}] [步骤 2] 请继续选择单扇平开窗…`);
+                    consoleOut.appendChild(document.createElement('br'));
+                    viewer.pickEvent.addEventListener(onVentPick);
+                } else {
+                    finishVent();
+                }
+            }
+
+            /* 打开弹窗并返回 Promise */
+            function askRoomArea() {
+                return new Promise((resolve, reject) => {
+                    const modal = document.getElementById('roomAreaModal');
+                    const input = document.getElementById('room-area-input');
+                    const okBtn = document.getElementById('room-confirm');
+                    const cancelBtn = document.getElementById('room-cancel');
+
+                    // 显示弹窗 & 自动聚焦
+                    modal.style.display = 'flex';
+                    input.focus();
+                    input.value = '';
+
+                    // 确认
+                    okBtn.onclick = () => {
+                        const val = parseFloat(input.value);
+                        if (!isNaN(val) && val > 0) {
+                            modal.style.display = 'none';
+                            resolve(val);
+                        } else {
+                            alert('请输入有效的正数！');
+                        }
+                    };
+                    // 取消 / 关闭
+                    cancelBtn.onclick = () => {
+                        modal.style.display = 'none';
+                        reject('用户取消输入');
+                    };
+                    // 点击遮罩关闭
+                    modal.onclick = e => {
+                        if (e.target === modal) {
+                            modal.style.display = 'none';
+                            reject('用户取消输入');
+                        }
+                    };
+                });
+            }
+
+            /* 追加：输入房间面积并校验 5 % */
+            async function check5Percent() {
+                leidatexiao.show = false;
+                
+                try {
+                    const roomArea = await askRoomArea();
+                    if (isNaN(roomArea)) {
+                        consoleOut.append('[校验] 输入无效，已取消');
+                        consoleOut.appendChild(document.createElement('br'));
+                        return;
+                    }
+                    const required = roomArea * 0.05;
+                    const actual = totalDouble + totalSingle;
+                    const ok = actual >= required;
+                    consoleOut.append(`[${new Date().toLocaleTimeString()}] [校验] 房间面积：${roomArea.toFixed(2)} m²，需开口 ≥ ${required.toFixed(2)} m²，实际：${actual.toFixed(2)} m² — ${ok ? '✅ 合规' : '❌ 不足'}`);
+                    consoleOut.appendChild(document.createElement('br'));
+                    tongfengmianji_result = '符合要求';
+                    tongfengmianji_txt = `房间面积：${roomArea.toFixed(2)} m²，需开口 ≥ ${required.toFixed(2)} m²，实际：${actual.toFixed(2)} m² — ${ok ? '✅ 合规' : '❌ 不足'}`;
+                } catch (e) {
+                    consoleOut.append(`[校验] 输入无效，已取消`);
+                    consoleOut.appendChild(document.createElement('br'));
+                }
+                setTimeout(() => {
+                    leidatexiao.show = false;
+                }, 3000);
+                
+            }
+            /* 整体结束 */
+            function finishVent() {
+                ventMode = false;
+                step = 0;
+                viewer.pickEvent.removeEventListener(onVentPick);
+                consoleOut.append(`[${new Date().toLocaleTimeString()}] [完成] 双单平开窗：${totalDouble.toFixed(2)} m²，单扇平开窗：${totalSingle.toFixed(2)} m²，总和：${(totalDouble + totalSingle).toFixed(2)} m²`);
+                consoleOut.appendChild(document.createElement('br'));
+                consoleOut.appendChild(document.createElement('br'));
+                check5Percent();   // ← 新增
+            }
+
+            /* 按钮主控 */
+            ventBtn.addEventListener('click', () => {
+                if (!ventMode) {
+                    // 初始化
+                    ventMode = true;
+                    step = 1;
+                    totalDouble = 0;
+                    totalSingle = 0;
+                    consoleOut.append('[步骤 1] 请选择双单平开窗…');
+                    consoleOut.appendChild(document.createElement('br'));
+                    viewer.pickEvent.addEventListener(onVentPick);
+                } else if (step === 1) {
+                    // 第 1 步结束 → 进入第 2 步
+                    nextStep();
+                } else {
+                    // 第 2 步结束 → 输出结果
+                    finishVent();
+                }
+            });
+
+            /* Esc 随时退出 */
+            document.addEventListener('keydown', e => {
+                if (e.key === 'Escape' && ventMode) finishVent();
+            });
+            //#endregion  5% 通风面积验算（分两步选窗）
+
+            //#region  限高分析动画
+            var heightDHControl = document.getElementById('heightDH-control');
+            heightDHControl.addEventListener('click', async () => {
+                HighLimit(viewer, scene);
+            });
+
+            var entity;
+            var arr = [];
+            var i = 0;
+            while (i < 20000) {
+                arr.push(i);
+                i++;
+            }
+
+            function HighLimit(viewer, scene) {
+
+                var building = scene.layers.find(QBIM);
+                var building1 = scene.layers.find('裁剪线白膜');
+                building1.visible = true;
+                var instance = new SuperMap3D.S3MInstanceCollection(scene._context);
+                scene.primitives.add(instance);
+                xiangaofenxikangti = viewer.entities.add({
+                    name: '限高框体',
+                    polygon: {
+                        hierarchy: SuperMap3D.Cartesian3.fromDegreesArray([113.885195, 22.503407,
+                            113.885641, 22.502984,
+                            113.885133, 22.502520,
+                            113.884688, 22.502912]),
+                        extrudedHeight: 0,//修改成54
+                        material: SuperMap3D.Color.AQUA.withAlpha(0.1),
+                        outline: true,
+                        outlineColor: SuperMap3D.Color.RED,
+                    }
+                });
+                window.startLimit = function () { };
+                window.setTimeout(function () {
+                    building.clipLineColor = SuperMap3D.Color.WHITE.withAlpha(0.0);
+                    building1.setObjsColor(arr, SuperMap3D.Color.DARKORANGE.withAlpha(0.5));
+
+                    var height = 0;
+                    var flag = true;
+                    var flagA = true;
+                    window.setInterval(function () {
+                        if (height <= xianzhigaodu && flagA) {
+                            if (flag) {
+                                height += 0.25;
+                                xiangaofenxikangti.polygon.extrudedHeight = height + 2;//这行注释掉
+                            }
+                            if (height === xianzhigaodu) {
+                                flagA = false;
+                                var tooltip = createTooltip(document.body);
+                                var cartesian = SuperMap3D.Cartesian3.fromDegrees(113.88495819037257, 22.502816329318875, 48);
+                                var pick = SuperMap3D.SceneTransforms.wgs84ToWindowCoordinates(viewer.scene, cartesian);
+                                tooltip.showAt(pick, '建筑限高54米');
+                                window.setTimeout(function () { tooltip.setVisible(false); }, 3000);
+
+                            }
+
+
+                            building.setCustomClipBox({
+                                dimensions: new SuperMap3D.Cartesian3(280, 250, height * 2),
+                                position: SuperMap3D.Cartesian3.fromDegrees(113.88512556554223, 22.50291268876604, height / 50 - 1),
+                                clipMode: "clip_behind_any_plane"
+                            });
+                            building1.setCustomClipBox({
+                                dimensions: new SuperMap3D.Cartesian3(280, 250, height * 2),
+                                position: SuperMap3D.Cartesian3.fromDegrees(113.88512556554223, 22.50291268876604, height / 50 - 1),
+                                clipMode: "clip_behind_all_plane"
+                            });
+
+                            //
+                            const ly = scene.layers.find('要删的图层');
+                            if (ly) {
+                                scene.layers.remove(ly);   // 删除
+                            }
+                        }
+                    }, 55);
+                }, 2000);
+            }
+            //#endregion 
+
+            //#region  高亮显示
+            var lightControl = document.getElementById('light-control');
+            lightControl.addEventListener('click', async () => {
+                const layer = scene.layers.find(QBIM);
+                //const layer1 = scene.layers.find('裁剪线白膜');
+                //layer1.visible = false;
+                //先整体透明
+                layer.setObjsColor(arr, SuperMap3D.Color.WHITE.withAlpha(0.5));
+
+                const ids = range(8534, 8537);
+                layer.setObjsColor(ids, SuperMap3D.Color.RED.withAlpha(1.0));   // 仅染色
+
+            });
+            //#endregion
+
+            //#region天空盒
+            let defaultSkyBox, currentSkyBox, skyListener;
+            let handlerCloud = "cloud", handlerSky = "skyBox";
+            let sunSkyBox = new SuperMap3D.SkyBox({
+                sources: {
+                    positiveX: './images/SkyBox/sunsetglow/Right.jpg',
+                    negativeX: './images/SkyBox/sunsetglow/Left.jpg',
+                    positiveY: './images/SkyBox/sunsetglow/Front.jpg',
+                    negativeY: './images/SkyBox/sunsetglow/Back.jpg',
+                    positiveZ: './images/SkyBox/sunsetglow/Up.jpg',
+                    negativeZ: './images/SkyBox/sunsetglow/Down.jpg'
+                }
+            });
+            let blueSkyBox = new SuperMap3D.SkyBox({
+                sources: {
+                    positiveX: './images/SkyBox/bluesky/Right.jpg',
+                    negativeX: './images/SkyBox/bluesky/Left.jpg',
+                    positiveY: './images/SkyBox/bluesky/Front.jpg',
+                    negativeY: './images/SkyBox/bluesky/Back.jpg',
+                    positiveZ: './images/SkyBox/bluesky/Up.jpg',
+                    negativeZ: './images/SkyBox/bluesky/Down.jpg'
+                }
+            });
+            let hdrSkyBox = new SuperMap3D.SkyBox({
+                imageUrl: './images/SkyBox/panorama/HDR_night_4K.hdr'
+            })
+            let jpgSkyBox = new SuperMap3D.SkyBox({
+                imageUrl: './images/SkyBox/panorama/HDR_cloud_4K.jpg'
+            })
+            defaultSkyBox = viewer.scene.skyBox;
+
+            //初始化时把天空盒资源准备好
+            function initialSkyBox() {
+                if (scene.frameState.passes.render) {
+                    sunSkyBox.update(scene.frameState, true);
+                    blueSkyBox.update(scene.frameState, true);
+                    scene.postRender.removeEventListener(initialSkyBox);
+                }
+            }
+            scene.postRender.addEventListener(initialSkyBox);
+            //相机上升到一定位置,天空盒出现渐变效果
+            function gradualChange() {
+                skyListener = function () {
+                    let cameraHeight = scene.camera.positionCartographic.height;
+
+                    let skyAtmosphereH1 = 22e4; // 大气开始渐变的最大高度
+                    let skyBoxH1 = 15e4; // 天空开始渐变的最大高度
+                    let skyBoxH2 = 12e4; // 天空开始渐变的最小高度
+                    let bufferHeight = 1e4;
+                    if (cameraHeight < skyAtmosphereH1 && SuperMap3D.defined(currentSkyBox)) {
+                        let skyAtmosphereT = (cameraHeight - skyBoxH2) / (skyAtmosphereH1 - skyBoxH2);
+                        if (skyAtmosphereT > 1.0) {
+                            skyAtmosphereT = 1.0;
+                        } else if (skyAtmosphereT < 0.0) {
+                            skyAtmosphereT = 0.0;
+                        }
+                        let skyBoxT = (cameraHeight - skyBoxH2) / (skyBoxH1 - skyBoxH2);
+                        if (skyBoxT > 1.0) {
+                            skyBoxT = 1.0;
+                        } else if (skyBoxT < 0.0) {
+                            skyBoxT = 0.0;
+                        }
+                        currentSkyBox.alpha = 1.0 - skyBoxT;
+                        if (cameraHeight > skyBoxH2) {
+                            scene.skyAtmosphere.show = true;
+                            scene.skyAtmosphere.alpha = skyAtmosphereT;
+                            scene.skyBox = currentSkyBox;
+                        } else {
+                            scene.skyAtmosphere.show = false;
+                        }
+                    } else {
+                        scene.skyAtmosphere.alpha = 1.0;
+                        scene.skyBox = defaultSkyBox;
+                    }
+
+                    //控制相机 速率
+                    if (scene.skyBox !== defaultSkyBox) {
+                        if (cameraHeight > (skyBoxH2 - 2 * bufferHeight) && cameraHeight < skyBoxH1 + 3 * bufferHeight) {
+                            scene.screenSpaceCameraController.zoomFactor = 0.4;
+                        } else {
+                            scene.screenSpaceCameraController.zoomFactor = 5.0;
+                        }
+                    } else {
+                        scene.skyBox.alpha = 1.0;
+                        scene.skyAtmosphere.alpha = 1.0;
+                        scene.screenSpaceCameraController.zoomFactor = 5.0;
+                    }
+
+                };
+                scene.postRender.addEventListener(skyListener);
+            }
+
+            //操作相机
+            function handlerCamera(val) {
+                let isSkyBox = handlerCloud;
+                if (val == isSkyBox) {
+                    scene.camera.flyTo({
+                        destination: new SuperMap3D.Cartesian3(-5701705.704276292, 21279055.37816442, 12718852.74864528)
+                    })
+                } else {
+                    scene.camera.flyTo({
+                        destination: new SuperMap3D.Cartesian3(-2182943.9676850257, 4386804.912825742, 4069531.779775907),
+                        orientation: {
+                            heading: 6.228849889848172,
+                            pitch: -0.0491143105095484,
+                            roll: 2.973174177967053e-7
+                        }
+                    })
+                };
+            }
+
+            let viewModel_sky = {
+                cloudSpeed: 1.0,
+                skyRotate: 0.0
+            };
+            SuperMap3D.knockout.track(viewModel_sky);
+            let toolbar_sky = document.getElementById('toolbar-sky');
+            SuperMap3D.knockout.applyBindings(viewModel_sky, toolbar_sky);
+
+            // 设置云层速度
+            SuperMap3D.knockout.getObservable(viewModel_sky, 'cloudSpeed').subscribe(
+                function (newValue) {
+                    cloudBox.speed = Number(newValue);
+                    $('#speedText').text(newValue)
+                }
+            );
+            // 设置天空盒旋转
+            SuperMap3D.knockout.getObservable(viewModel_sky, 'skyRotate').subscribe(
+                function (newValue) {
+                    viewer.scene.skyBox.horizontalRotationAngle = Number(newValue);
+                }
+            );
+
+            $(".showCloud").hide();
+            $(".showSky").hide();
+
+            //开启云层
+            $("#openCloud").on("input change", function () {
+                let openCloud = this.checked;
+                if (openCloud) {
+                    scene.cloudBox = cloudBox;
+                    $(".showCloud").show();
+                    $('#openSkybox').css("top", "18.5em")
+                } else {
+                    scene.cloudBox = null;
+                    $(".showCloud").hide();
+                    $('#openSkybox').css("top", "12em")
+                }
+                handlerCamera(handlerCloud);  //操作相机
+            });
+
+            //切换云层
+            $("#toggle-sky").on('input propertychange', function () {
+                let cloudTextureUrl = $(this).val();
+                scene.cloudBox.url = cloudTextureUrl;
+            });
+
+            //开启天空盒
+            $("#openSkybox").on("input change", function () {
+                let openSkybox = this.checked;
+                if (openSkybox) {
+                    $(".showSky").show();
+                    $select.empty();
+                    let $newOption1 = $('<option>', {
+                        value: 'hdrsky',
+                        text: 'HDR-傍晚'
+                    });
+                    let $newOption2 = $('<option>', {
+                        value: 'jpgsky',
+                        text: 'JPG-清晨'
+                    });
+                    $select.append($newOption1, $newOption2);
+                    sunSkyBox.WSpeed = 0.5;
+                    sunSkyBox.show = true;
+                    currentSkyBox = hdrSkyBox;
+                    // if (!layer) loadScene();      //加载场景
+                    //handlerCamera(handlerSky);  //切换视角
+                    gradualChange();
+                } else {
+                    $(".showSky").hide();
+                    scene.postRender.removeEventListener(skyListener);
+                    scene.skyBox = defaultSkyBox;
+                    scene.skyAtmosphere.show = true;
+                    //handlerCamera(handlerCloud);  //切换视角
+                }
+            });
+
+            // 获取select元素
+            let $select = $('#toggle-skyBox');
+            // 动态创建option
+            function createOption(value1, value2, text1, text2) {
+                $select.empty();
+                let $newOption1 = $('<option>', {
+                    value: value1,
+                    text: text1
+                });
+                let $newOption2 = $('<option>', {
+                    value: value2,
+                    text: text2
+                });
+
+                $select.append($newOption1, $newOption2);
+            }
+
+            // 切换天空盒
+            function changeSkyBox(skyBoxName) {
+                if (skyBoxName == "sunsky") {
+                    sunSkyBox.WSpeed = 0.5;
+                    sunSkyBox.show = true;
+                    currentSkyBox = sunSkyBox;
+                    scene.skyBox = currentSkyBox;
+                    blueSkyBox.show = false;
+                    //  hdrSkyBox.show = false;
+                } else if (skyBoxName == "bluesky") {
+                    blueSkyBox.WSpeed = 0.5;
+                    blueSkyBox.show = true;
+                    currentSkyBox = blueSkyBox;
+                    scene.skyBox = currentSkyBox;
+                    sunSkyBox.show = false;
+                    //  hdrSkyBox.show = false;
+                } else if (skyBoxName == "hdrsky") {
+                    hdrSkyBox.WSpeed = 0.5;
+                    hdrSkyBox.show = true;
+                    currentSkyBox = hdrSkyBox;
+                    scene.skyBox = currentSkyBox;
+                    //  sunSkyBox.show = false;
+                    //  blueSkyBox.show = false;
+                    jpgSkyBox.show = false;
+                } else {
+                    jpgSkyBox.WSpeed = 0.5;
+                    jpgSkyBox.show = true;
+                    currentSkyBox = jpgSkyBox;
+                    scene.skyBox = currentSkyBox;
+                    //  sunSkyBox.show = false;
+                    //  blueSkyBox.show = false;
+                    hdrSkyBox.show = false;
+                }
+            }
+
+            // 选择纹理模式
+            $('#cubicSheet').click(function () {
+                let mode = $('#cubicSheet').val();
+                createOption('sunsky', 'bluesky', '晚霞', '晴天')
+                let skyBoxName = $('#toggle-skyBox').val();
+                changeSkyBox(skyBoxName);
+            });
+            $('#panorama').click(function () {
+                let mode = $('#panorama').val();
+                createOption('hdrsky', 'jpgsky', 'HDR-傍晚', 'JPG-清晨')
+                let skyBoxName = $('#toggle-skyBox').val();
+                changeSkyBox(skyBoxName);
+            });
+
+            //切换天空盒
+            $("#toggle-skyBox").on("input propertychange", function () {
+                let skyBoxName = $(this).val();
+                changeSkyBox(skyBoxName);
+            });
+
+            $(".params-setting-anchor").click(function () {
+                $(".params-setting").toggleClass("params-setting-hide");
+            });
+
+            // 切换场景模式
+            $('#mode3d').click(function () {
+                viewer.scene.mode = SuperMap3D.SceneMode.SCENE3D;
+            });
+            $('#modeColumbus').click(function () {
+                viewer.scene.mode = SuperMap3D.SceneMode.COLUMBUS_VIEW;
+            });
+
+            //云层开启
+            var bookmarksDel = document.getElementById('bookmarks-del');
+            bookmarksDel.addEventListener('click', async () => {
+
+            });
+            //天空盒开启
+            var bookmarksDel = document.getElementById('bookmarks-del');
+            bookmarksDel.addEventListener('click', async () => {
+
+            });
+            //参数设置界面开启
+            //#endregion天空盒
+
+            //#region场景输出
+            $('#output').on('click', function () {
+                var promise = scene.outputSceneToFile();
+                SuperMap3D.when(promise, function (base64data) {
+                    download(base64data);
+                });
+            });
+            //#endregion场景输出
+
+            //#region圆圈扩散特效实例
+            function specialEffects() {
+                function CircleWaveMaterialProperty(color, duration, count, gradient) {
+                    this._definitionChanged = new SuperMap3D.Event()
+                    this._color = undefined
+                    this._colorSubscription = undefined
+                    this.color = color
+                    this.duration = SuperMap3D.defaultValue(duration, 1e3)
+                    this.count = SuperMap3D.defaultValue(count, 2)
+                    if (this.count <= 0) this.count = 1
+                    this.gradient = SuperMap3D.defaultValue(gradient, 0.1)
+                    if (this.gradient < 0) this.gradient = 0
+                    else if (this.gradient > 1) this.gradient = 1
+                    this._time = performance.now()
+                }
+                Object.defineProperties(CircleWaveMaterialProperty.prototype, {
+                    isConstant: {
+                        get: function () {
+                            return false
+                        }
+                    },
+                    definitionChanged: {
+                        get: function () {
+                            return this._definitionChanged
+                        }
+                    },
+                    color: SuperMap3D.createPropertyDescriptor('color')
+                })
+                CircleWaveMaterialProperty.prototype.getType = function (time) {
+                    return SuperMap3D.Material.CircleWaveMaterialType
+                }
+                CircleWaveMaterialProperty.prototype.getValue = function (time, result) {
+                    if (!SuperMap3D.defined(result)) {
+                        result = {}
+                    }
+                    result.color = SuperMap3D.Property.getValueOrClonedDefault(this._color, time, SuperMap3D.Color.WHITE, result.color)
+                    result.time = (((new Date()).getTime() - this._time) % this.duration) / this.duration
+                    result.count = this.count
+                    result.gradient = 1 + 10 * (1 - this.gradient)
+                    return result
+                }
+                CircleWaveMaterialProperty.prototype.equals = function (other) {
+                    return this === other ||
+                        (other instanceof CircleWaveMaterialProperty &&
+                            SuperMap3D.Property.equals(this._color, other._color))
+                }
+                SuperMap3D.CircleWaveMaterialProperty = CircleWaveMaterialProperty
+                SuperMap3D.Material.CircleWaveMaterialType = 'CircleWaveMaterial'
+                SuperMap3D.Material.CircleWaveSource = CircleWaveShader;
+                SuperMap3D.Material._materialCache.addMaterial(SuperMap3D.Material.CircleWaveMaterialType, {
+                    fabric: {
+                        type: SuperMap3D.Material.CircleWaveMaterialType,
+                        uniforms: {
+                            color: new SuperMap3D.Color(1.0, 0.0, 0.0, 1.0),
+                            time: 1,
+                            count: 1,
+                            gradient: 0.1
+                        },
+                        source: SuperMap3D.Material.CircleWaveSource
+                    },
+                    translucent: function (material) {
+                        return !0
+                    }
+                })
+            }
+            //#endregion雷达查询特效
+
+            //#region 电子围栏特效
+            let fenceData = [
+                [113.885195, 22.503407],
+                [113.885641, 22.502984],
+                [113.885133, 22.502520],
+                [113.884688, 22.502912],
+                [113.885195, 22.503407]   // 闭合
+            ];
+            let fenceCoor = Array.prototype.concat.apply([], fenceData);
+            fenceEnt = viewer.entities.add({
+                name: '电子围栏-动态风格-循环',
+                wall: {
+                    positions: SuperMap3D.Cartesian3.fromDegreesArray(fenceCoor),
+                    maximumHeights: new Array(fenceData.length).fill(25),
+                    minimumHeights: new Array(fenceData.length).fill(0),
+                    material: new SuperMap3D.DynamicWallMaterialProperty({
+                        trailImage: './images/ElectronicWall/wall.png',
+                        color: SuperMap3D.Color.BLUE,
+                        duration: 1500
+                    })
+                }
+            });
+            fenceEnt.show = false;   // 默认可见
+            //#endregion
+
+            //#region 动画特效查看水平剖面图
+            $('#look').on('click', function () {
+                HighLimit1(viewer, viewer.scene);
+            });
+
+            function HighLimit1(viewer, scene) {
+                const layer = scene.layers.find(QBIM);   // 1. 加引号
+                const boxSize = new SuperMap3D.Cartesian3(280, 250, 45); // 固定45m高
+                const center = SuperMap3D.Cartesian3.fromDegrees(
+                    113.88512556554223, 22.50291268876604, 22.5
+                );  // 盒子中心
+
+                layer.clipLineColor = SuperMap3D.Color.WHITE.withAlpha(0);
+
+                let h = 45;                     // 从顶部开始
+                let dir = -0.25;
+                const timer = setInterval(() => {
+                    h += dir;              // 移动一步
+
+                    if (h <= 15) { dir = 0.25; const t0 = Date.now(); while (Date.now() - t0 < 2000) { /* 空转 2 秒 */ } }
+                    if (h >= 45 && dir > 0) {
+                        clearInterval(timer);   // 到顶结束
+                        return;
+                    }
+                    layer.setCustomClipBox({
+                        dimensions: boxSize,
+                        position: SuperMap3D.Cartesian3.fromDegrees(
+                            113.88512556554223,
+                            22.50291268876604,
+                            h - 22.5              // z 从 22.5 → -22.5
+                        ),
+                        clipMode: 'clip_behind_any_plane'
+                    });
+                }, 55);
+            }
+            //#endregion
+
+            //#region  查看垂直剖面图
+            $('#look1').on('click', function () {
+                SideSection(viewer, viewer.scene);
+            });
+
+            function SideSection(viewer, scene) {
+                const layer = scene.layers.find(QBIM);
+                const boxSize = new SuperMap3D.Cartesian3(100, 100, 70);
+                const lon = 113.885100;      // 固定经度
+                const z = 22.5;            // 盒子中心高
+
+                const minLat = 22.502022;    // 起点
+                const maxLat = 22.502642;    // 终点
+                let lat = minLat;
+                let dir = 0.00000225;        // 0.25 m/步 向北
+
+                const timer = setInterval(() => {
+                    lat += dir;
+
+                    // 碰到边界立即掉头
+                    if (lat >= maxLat) {
+                        lat = maxLat;   // 校正误差
+                        dir = -dir;     // 反向
+                    }
+                    if (lat <= minLat) {
+                        lat = minLat;
+                        clearInterval(timer);
+                    }
+
+                    layer.setCustomClipBox({
+                        dimensions: boxSize,
+                        position: SuperMap3D.Cartesian3.fromDegrees(lon, lat, z),
+                        clipMode: 'clip_behind_all_plane'   // 保留外部
+                    });
+                }, 55);
+            }
+            //#endregion
+
+            //#region光照分析
+            $('#SUNLIGHT').on('click', function () {
+                entity = viewer.entities.add({
+                    name: 'hhh',
+                    polygon: {
+                        hierarchy: SuperMap3D.Cartesian3.fromDegreesArray([113.885195, 22.503407,
+                            113.885641, 22.502984,
+                            113.885133, 22.502520,
+                            113.884688, 22.502912]),
+                        extrudedHeight: 6.4,//修改成54
+                        material: SuperMap3D.Color.AQUA.withAlpha(0.1),
+                        outline: true,
+                        outlineColor: SuperMap3D.Color.RED,
+                    }
+                });
+                const layer = scene.layers.find('config');
+                //  layer.visible = !layer.visible;   // 每点一次就反一次
+                $('#toolbar').toggle();   // 点一次开，再点一次关
+            });
+            //#endregion光照分析
+
+            //#region雷达特效开启或关闭
+            $('#leida').on('click', function () {
+                leidatexiao.show = !leidatexiao.show;   // 直接取反
+            });
+            //#endregion
+
+            //#region电子围栏特效开关
+            $('#dianziweilan').on('click', function () {
+                fenceEnt.show = !fenceEnt.show;   // 默认可见
+            });
+            //#endregion
+
+            //#region住宅项目规范
+            $('#zhizhaixiangmuguifan').on('click', async function () {
+                overlay.classList.add('show');
+            });
+            //#endregion住宅项目规范
+
+            //#region 卧室层高控制
+            //定义变量
+            var BedroomheightControl = document.getElementById('Bedroomheight-control');
+            BedroomheightControl.addEventListener('click', async () => {
+                leidatexiao.show = true;
+                
+                const floors = Array.from({ length: cengshu }, (_, i) => `${i + 1}F`); // 要检查的楼层
+                const consoleOut = document.getElementById('console');
+
+                const floorHeights = new Map(); // key:楼层 string, value:SmMaxZ
+                const floorThickness = new Map(); // 楼层 -> 厚度
+                const floorSMID = new Map(); // ★ floor -> 主楼板 SMID
+                for (const floor of floors) {
+                    //1，查询该层楼板
+                    const fs = await doSqlQueryfloor(`标高='${floor}'`, "DataSource:楼板");
+                    if (!fs.length) continue;
+
+                    //2,查询主楼板
+                    const idxArea = fs[0].fieldNames.indexOf("面积");
+                    const idxSmZ = fs[0].fieldNames.indexOf("SMMAXZ");
+                    const idxThk = fs[0].fieldNames.indexOf("厚度"); // 上层楼板厚度
+                    const idxSmid = fs[0].fieldNames.indexOf("SMID"); // ★ 取 SMID 字段索引
+                    let maxArea = 0, mainZ = 0;
+                    for (const f of fs) {
+                        const area = Number(f.fieldValues[idxArea]);
+                        const z = Number(f.fieldValues[idxSmZ]);
+                        const thk = Number(f.fieldValues[idxThk] || 0);
+                        const smid = f.fieldValues[idxSmid]; // ★ 记录最大面积板
+                        if (z > 0 && area > maxArea) {
+                            maxArea = area;
+                            mainZ = z;
+                            mainThk = thk;
+                            mainSmid = smid; // ★ 记录最大面积板
+                        }
+                    }
+                    floorHeights.set(floor, mainZ);
+                    floorThickness.set(floor, mainThk);
+                    floorSMID.set(floor, mainSmid); // 保存主楼板的 SMID
+                    window.console.log(`${floor} 主楼板面积：${maxArea.toFixed(2)} m² | SmMaxZ：${mainZ.toFixed(2)} m`);
+                    setTimeout(() => {
+                leidatexiao.show = false;
+            }, 3000);
+                }
+
+                //计算顶层RF的高度
+                const rfFs = await doSqlQueryfloor(`标高='RF'`, "DataSource:楼板");
+                let rfZ = 0;
+                const idxArea = rfFs[0].fieldNames.indexOf("面积");
+                const idxSmZ = rfFs[0].fieldNames.indexOf("SMMAXZ");
+                const idxThk = rfFs[0].fieldNames.indexOf("厚度"); // 上层楼板厚度
+                let maxArea = 0, mainZ = 0;
+                for (const f of rfFs) {
+                    const area = Number(f.fieldValues[idxArea]);
+                    const z = Number(f.fieldValues[idxSmZ]);
+                    const thk = Number(f.fieldValues[idxThk] || 0);
+                    if (z > 0 && area > maxArea) {
+                        maxArea = area;
+                        rfZ = z;
+                        mainThk = thk;
+                    }
+                }
+                window.console.log(maxArea, rfZ, mainThk);
+
+                const unqualifiedSMIDs = []; // ←新增
+                // 2. 逐层计算层高
+                // 逐层计算层高（含顶层）
+                for (let i = 0; i < floors.length; i++) {
+                    const curFloor = floors[i];
+                    const curZ = floorHeights.get(curFloor);
+                    const curThk = floorThickness.get(curFloor) || 0;
+                    const curSmid = floorSMID.get(curFloor); // ★
+                    if (curZ === undefined) continue;
+
+                    // 下一层或 RF
+                    const nextZ = i === floors.length - 1 ?
+                        rfZ :
+                        floorHeights.get(floors[i + 1]);
+                    if (nextZ === undefined) continue;
+
+                    const upThk = i === floors.length - 1 ?
+                        mainThk :
+                        floorThickness.get(floors[i + 1]);
+                    if (upThk === undefined) continue;
+
+                    const height = nextZ - curZ;
+                    const netHeight = height - upThk;
+                    const okHt = height >= 3;
+                    const okNet = netHeight >= 2.6;
+                    const msg = okHt && okNet ? "符合规定" :
+                        !okHt ? "层高不足3 m" :
+                        "净高不足2.6 m";
+                    if (!okHt || !okNet) unqualifiedSMIDs.push(curSmid); // ←新增
+
+                    consoleOut.append(`[${new Date().toLocaleTimeString()}] [${curFloor}] 层高：${height.toFixed(2)} m | 净高：${netHeight.toFixed(2)} m — ${msg}`);
+                    consoleOut.appendChild(document.createElement('br'));
+                }
+
+                // 保存结果到变量
+                if (unqualifiedSMIDs.length > 0) {
+                    woshicenggao_result = '不符合要求';
+                    woshicenggao_txt = `存在 ${unqualifiedSMIDs.length} 处卧室层高或净高不符合规定。`;
+                } else {
+                    woshicenggao_result = '符合要求';
+                    woshicenggao_txt = '所有卧室层高和净高均符合规定。';
+                }
+
+                if (false) {
+                    var layer = scene.layers.find(QBIM);
+                    layer.setObjsColor(arr, SuperMap3D.Color.WHITE.withAlpha(0.5));
+                    unqualifiedSMIDs.forEach((_, i, arr) => arr[i] += 8533); //加楼板的在融合图层中的编号
+                    layer.setObjsColor(unqualifiedSMIDs, SuperMap3D.Color.RED.withAlpha(1.0)); // 仅染色
+                }
+            });
+            //#endregion
+
+            //#region 楼板与卫生间高度比较，安全类4.1.12（自定义输出）  
+
+            // 触发对比
+            document.getElementById('shineidimiangaocha-control').addEventListener('click', () => {
+                leidatexiao.show = true;
+                
+                compareSlabHeights();  
+                setTimeout(() => {
+                leidatexiao.show = false;
+            }, 3000);                    // 执行校验
+            });
+
+            async function compareSlabHeights() {
+                // 1. 拉取数据
+                const wcFeatures = await doSqlQueryfloor1("SMBIMINFO LIKE '%卫生间%'", "DataSource:楼板");
+                const livingFeatures = await doSqlQueryfloor1("SMBIMINFO NOT LIKE '%卫生间%'", "DataSource:楼板");
+
+                // 2. 分组
+                const groupByLevel = features => {
+                    const map = {};
+                    features.forEach(f => {
+                        const lvl = f.fieldValues[f.fieldNames.indexOf("标高")];
+                        const z = parseFloat(f.fieldValues[f.fieldNames.indexOf("SMMAXZ")]);
+                        if (!lvl || isNaN(z)) return;
+                        (map[lvl] || (map[lvl] = [])).push(z);
+                    });
+                    Object.keys(map).forEach(lvl => {
+                        const arr = map[lvl];
+                        map[lvl] = arr.reduce((s, v) => s + v, 0) / arr.length;
+                    });
+                    return map;
+                };
+                const wcByLevel = groupByLevel(wcFeatures);
+                const livingByLevel = groupByLevel(livingFeatures);
+
+                // 3. 对比并输出到自定义控制台
+                const bad = [];
+                Object.keys(livingByLevel).forEach(level => {
+                    if (!(level in wcByLevel)) return;
+                    const diff = Math.abs(livingByLevel[level] - wcByLevel[level]);
+                    if (diff >= 0.015) {
+                        const line = `存在不合格楼板(高差应小于0.015m)：${level}: living=${livingByLevel[level].toFixed(3)}m, wc=${wcByLevel[level].toFixed(3)}m, diff=${diff.toFixed(3)}m\n`;
+                        bad.push(line.trim());   
+                        shineidimaingaocha_txt1 += line; // 字符串累加，自带换行
+                    }
+                });
+
+                if (bad.length) {
+                    bad.forEach(msg => {
+                        consoleOut.append(`[${new Date().toLocaleTimeString()}] ${msg}`);
+                        consoleOut.appendChild(document.createElement('br'));
+                    });
+                    // 把不合格楼层对应的楼板 SMID 收集起来
+                    const failIDs = [];
+                    wcFeatures.forEach(f => {
+                        const lvl = f.fieldValues[f.fieldNames.indexOf("标高")];
+                        if (bad.some(b => b.includes(lvl))) {               // 该楼层不合格
+                            failIDs.push(+f.fieldValues[f.fieldNames.indexOf("SMID")]);
+                        }
+                    })
+                    console.log(failIDs);
+                    // 2. 直接高亮
+                    const layer = scene.layers.find(QBIM);
+                    layer.setObjsColor(arr, SuperMap3D.Color.WHITE.withAlpha(0.5));         // 先恢复
+                    const ids = failIDs.map(id => id + 8533);                   // 楼板偏移
+                    layer.setObjsColor(ids, SuperMap3D.Color.RED.withAlpha(1.0));
+                    shineidimiangaocha_result = '不符合要求';
+                    shineidimaingaocha_txt = `存在${bad.length}处不合格的卫生间楼板`;
+                } else {
+                    consoleOut.append(`[${new Date().toLocaleTimeString()}] 所有楼层的楼板与卫生间楼板高度差均小于 0.015 m — 符合规定`);
+                    consoleOut.appendChild(document.createElement('br'));
+                }
+            }
+
+            // 已验证的 doSqlQueryfloor
+            function doSqlQueryfloor1(sqlStr, data) {
+                return new Promise(resolve => {
+                    const sqlParameter = {
+                        datasetNames: [data],
+                        getFeatureMode: "SQL",
+                        queryParameter: { attributeFilter: sqlStr }
+                    };
+                    $.ajax({
+                        type: "post",
+                        url: "http://localhost:8090/iserver/services/data-BIMGongZuoKongJian/rest/data/featureResults.rjson?returnContent=true",
+                        data: JSON.stringify(sqlParameter),
+                        contentType: "application/json",
+                        success: result => {
+                            const obj = JSON.parse(result);
+                            resolve(obj.featureCount > 0 ? obj.features : []);
+                        },
+                        error: msg => {
+                            console.error("doSqlQueryfloor 查询失败！", msg);
+                            resolve([]);
+                        }
+                    });
+                });
+            }
+            //#endregion
+
+            //#region 公共楼梯设置评估（4.2.2，自定义输出）
+            // 绑定“公共楼梯校验”项
+            document.getElementById('stairs-validate-control').addEventListener('click', () => {
+                leidatexiao.show = true;
+                
+                validatePublicStairs();
+                setTimeout(() => {
+                leidatexiao.show = false;
+            }, 3000);
+            });
+
+            async function validatePublicStairs() {
+                const consoleOut = document.getElementById('console');
+                // 1. 拉取所有“楼梯”要素
+                const stairs = await doSqlQueryfloor1("SMBIMINFO LIKE '%楼梯%'", "DataSource:楼梯");
+                const violations = [];
+
+                // 2. 校验每个楼梯
+                stairs.forEach(f => {
+                    const names = f.fieldNames,
+                        vals = f.fieldValues;
+                    const smid = vals[names.indexOf("SMID")];
+                    const topZ = parseFloat(vals[names.indexOf("SMMAXZ")]);
+                    const bottomZ = parseFloat(vals[names.indexOf("SMMINZ")]);
+                    const treadDepth = parseFloat(vals[names.indexOf("实际踏板深度")]);
+                    const riserHeight = parseFloat(vals[names.indexOf("实际踢面高度")]);
+                    const actualRisers = parseFloat(vals[names.indexOf("实际踢面数")]);
+                    const requiredRisers = parseFloat(vals[names.indexOf("所需踢面数")]);
+                    const requiredHeight = parseFloat(vals[names.indexOf("所需的楼梯高度")]);
+
+                    // 规则②：踏步宽度 ≥ 0.26m
+                    if (isNaN(treadDepth) || treadDepth < 0.26) {
+                        violations.push(`SmID ${smid}: 踏步宽度 ${treadDepth.toFixed(3)}m < 0.26m`);
+                    }
+                    // 规则②：踢面高度 ≤ 0.175m
+                    if (isNaN(riserHeight) || riserHeight > 0.175) {
+                        violations.push(`SmID ${smid}: 踢面高度 ${riserHeight.toFixed(3)}m > 0.175m`);
+                    }
+                    // 踏步数一致
+                    if (!isNaN(requiredRisers) && !isNaN(actualRisers) && actualRisers !== requiredRisers) {
+                        violations.push(`SmID ${smid}: 实际踏步数 ${actualRisers} ≠ 所需 ${requiredRisers}`);
+                    }
+                    // 高度一致
+                    const actualHeight = parseFloat((topZ - bottomZ).toFixed(3));
+                    if (!isNaN(requiredHeight) && actualHeight !== requiredHeight) {
+                        violations.push(`SmID ${smid}: 实际高度 ${actualHeight.toFixed(3)}m ≠ 要求 ${requiredHeight.toFixed(3)}m`);
+                    }
+                });
+
+                // 3. 输出到自定义窗口并保存结果
+                if (violations.length) {
+                    const resultText = `存在不合格的要素：${violations.join('；')}`;
+                    violations.forEach(msg => {
+                        consoleOut.append(`[${new Date().toLocaleTimeString()}] 存在不符合要素：`);
+                        consoleOut.append(` ${msg}`);
+                        consoleOut.appendChild(document.createElement('br'));
+                    });
+                    const failIDs = violations.map(v => +v.match(/SmID (\d+)/)[1]);
+                    const layer = scene.layers.find(QBIM);
+                    layer.setObjsColor(arr, SuperMap3D.Color.WHITE.withAlpha(0.5));
+                    layer.setObjsColor(failIDs.map(id => id + 8488), SuperMap3D.Color.RED.withAlpha(1.0));
+                    //用变量保存结果
+                    gongonglouti_result = '不符合要求';
+                    gongonglouti_txt1 = resultText;
+                    gongonglouti_txt = '存在 45 处高度不合格的公共楼梯';
+
+                } else {
+                    const resultText = `所有公共楼梯均符合 4.2.2 要求`;
+                    consoleOut.append(`[${new Date().toLocaleTimeString()}] ${resultText}`);
+                    consoleOut.appendChild(document.createElement('br'));
+                    //用变量保存结果
+                    gongonglouti_result = '符合要求';
+                    gongonglouti_txt = resultText;
+                }
+            }
+            //#endregion
+
+            //#region 防护栏杆设置评估（4.2.8，自定义输出）
+
+            document.getElementById('guardrail-installation-control').addEventListener('click', () => {
+                leidatexiao.show = true;
+                validateGuardrails();
+                setTimeout(() => {
+                leidatexiao.show = false;
+            }, 3000);
+            });
+
+            async function validateGuardrails() {
+                const consoleOut = document.getElementById('console');
+                // 1. 查询 RF 的 “玻璃” 和 2F/3F 的 “玻璃嵌板-NW”
+                const filter = "(标高 = 'RF' AND ElementName = '玻璃')" +
+                    " OR (标高 IN ('2F','3F') AND ElementName = '玻璃嵌板-NW')";
+                const rails = await doSqlQueryfloor1(filter, "DataSource:幕墙嵌板");
+
+                if (!rails.length) {
+                    const resultText = `未查询到任何目标要素，请检查过滤条件或数据集名称`;
+                    consoleOut.append(`[${new Date().toLocaleTimeString()}] ${resultText}`);
+                    consoleOut.appendChild(document.createElement('br'));
+                    //用变量保存结果
+                    fanghulan_result = '不适用';
+                    fanghulan_txt = resultText;
+                    return;
+                }
+
+                const violations = [];
+
+                // 2. 校验
+                rails.forEach((f) => {
+                    const names = f.fieldNames,
+                        vals = f.fieldValues;
+                    const smidIdx = names.findIndex(n => n.toLowerCase() === "smid");
+                    const smid = smidIdx >= 0 ? vals[smidIdx] : "<unknown>";
+
+                    let heightIdx = names.indexOf("高度(m)");
+                    if (heightIdx < 0) heightIdx = names.indexOf("高度");
+                    const height = heightIdx >= 0 ? parseFloat(vals[heightIdx]) : NaN;
+
+                    // 规则①：栏杆净高 ≥ 1.20m
+                    if (isNaN(height) || height < 1.20) {
+                        violations.push(`SmID ${smid}: 栏杆高度 ${isNaN(height) ? "NaN" : height.toFixed(3)}m < 1.20m`);
+                    }
+                });
+
+                // 3. 输出到自定义控制台
+                if (violations.length) {
+                    const resultText = `存在不合格的要素：${violations.join('；')}`;
+                    violations.forEach(msg => {
+                        consoleOut.append(`[${new Date().toLocaleTimeString()}] ${msg}`);
+                        consoleOut.appendChild(document.createElement('br'));
+                    });
+                    const failIDs = violations.map(v => +v.match(/SmID (\d+)/)[1]);
+                    const layer = scene.layers.find(QBIM);
+                    layer.setObjsColor(arr, SuperMap3D.Color.WHITE.withAlpha(0.5));
+                    layer.setObjsColor(failIDs.map(id => id + 7260), SuperMap3D.Color.RED.withAlpha(1.0));
+                    //用变量保存结果
+                    fanghulan_result = '不符合要求';
+                    fanghulan_txt = `存在 ${violations.length} 处高度不合格的防护栏杆`;
+                } else {
+                    const resultText = `所有防护栏杆均符合 ≥1.20m 要求`;
+                    consoleOut.append(`[${new Date().toLocaleTimeString()}] ${resultText}`);
+                    consoleOut.appendChild(document.createElement('br'));
+                    //用变量保存结果
+                    fanghulan_result = '符合要求';
+                    fanghulan_txt = resultText;
+                }
+            }
+            //#endregion
+
+            //#region 楼板厚度评估（5.0.4，自定义输出）
+            //定义变量
+
+            // 获取并展开“建筑安全”菜单
+            // 绑定“地砖楼面_50 厚度校验”项
+            document.getElementById('floor-thickness-control').addEventListener('click', () => {
+                leidatexiao.show = true;
+                compareSlabThickness();
+                setTimeout(() => {
+                leidatexiao.show = false;
+            }, 3000);
+            });
+
+            async function compareSlabThickness() {
+                // 1. 拉取所有 ElementName = '地砖楼面_50' 的要素
+                const slabs = await doSqlQueryfloor1(
+                    "ElementName = '地砖楼面_50'",
+                    "DataSource:楼板"
+                );
+
+                if (!slabs.length) {
+                    consoleOut.append(`[${new Date().toLocaleTimeString()}] 未查询到任何地砖楼面_50 要素`);
+                    consoleOut.appendChild(document.createElement('br'));
+                    //用变量保存结果
+                    louban_result = '符合要求';
+                    louban_txt = '未查询到任何地砖楼面_50 要素，无需检查。';
+                    return;
+                }
+
+                const violations = [];
+                slabs.forEach(f => {
+                    const names = f.fieldNames, vals = f.fieldValues;
+
+                    // SmID
+                    const smidIdx = names.findIndex(n => n.toLowerCase() === "smid");
+                    const smid = smidIdx >= 0 ? vals[smidIdx] : "<unknown>";
+
+                    // 标高
+                    const levelIdx = names.indexOf("标高");
+                    const level = levelIdx >= 0 ? vals[levelIdx] : "<unknown>";
+
+                    // 厚度
+                    let thickIdx = names.indexOf("厚度(m)");
+                    if (thickIdx < 0) thickIdx = names.indexOf("厚度");
+                    const thickness = thickIdx >= 0 ? parseFloat(vals[thickIdx]) : NaN;
+
+                    // 规则：楼板厚度 ≥ 0.10m
+                    if (isNaN(thickness) || thickness < 0.10) {
+                        violations.push(`SmID ${smid} (${level}): 厚度 ${isNaN(thickness) ? "NaN" : thickness.toFixed(3)}m < 0.10m`);
+                    }
+                });
+
+                // 4. 输出到自定义窗口并保存结果
+                if (violations.length) {
+                    const failIDs = violations.map(v => +v.match(/SmID (\d+)/)[1]);
+                    const layer = scene.layers.find(QBIM);
+                    layer.setObjsColor(arr, SuperMap3D.Color.WHITE.withAlpha(0.5));
+                    layer.setObjsColor(failIDs.map(id => id + 8533),
+                        SuperMap3D.Color.RED.withAlpha(1.0));
+                    const resultText = `存在不合格的要素：${violations.join('；')}`;
+                    violations.forEach(msg => {
+                        consoleOut.append(`[${new Date().toLocaleTimeString()}] ${msg}`);
+                        consoleOut.appendChild(document.createElement('br'));
+                    });
+                    louban_txt1 = resultText;
+                    //用变量保存结果
+                    louban_result = '不符合要求';
+                    louban_txt = `存在 ${violations.length} 处厚度不合格的楼板。`;
+                } else {
+                    const resultText = `所有地砖楼面_50 厚度均符合 ≥100mm 要求`;
+                    consoleOut.append(`[${new Date().toLocaleTimeString()}] ${resultText}`);
+                    consoleOut.appendChild(document.createElement('br'));
+                    //用变量保存结果
+                    louban_result = '符合要求';
+                    louban_txt = resultText;
+                }
+            }
+            //#endregion
+
+            //#region 查询特效开关
+            $('#chaxuntexiao').on('click', function () {
+                const layer = scene.layers.find(QBIM);
+                layer.removeObjsColor(arr);
+            });
+            //#endregion 查询特效开关
+
+            //#region 限高框体特效开关
+            $('#xiangaokaungtiqingkogn').on('click', function () {
+                xiangaofenxikangti.show = !xiangaofenxikangti.show;   // 直接取反
+            });
+            //#endregion 查询特效开关
+            
+        }
+
+        let cloudBox;//定义预
+        function init1(SuperMap3D, scene, viewer) {
+            viewer.resolutionScale = window.devicePixelRatio;
+            viewer.imageryLayers.addImageryProvider(new SuperMap3D.TiandituImageryProvider({
+                credit: new SuperMap3D.Credit('天地图全球影像服务     数据来源：国家地理信息公共服务平台 & 四川省测绘地理信息局'),
+                token: 'e17c793b8ec992114630740d1e667189'
+            }));
+            var imageryLayers = viewer.imageryLayers;
+            //初始化天地图全球中文注记服务，并添加至影像图层
+            var labelImagery = new SuperMap3D.TiandituImageryProvider({
+                mapStyle: SuperMap3D.TiandituMapsStyle.CIA_C, //天地图全球中文注记服务（经纬度投影）
+                token: 'e17c793b8ec992114630740d1e667189'
+            });
+            imageryLayers.addImageryProvider(labelImagery);
+
+
+            //#region   云层和天空盒相关代码
+            cloudBox = new SuperMap3D.CloudBox({
+                url: "./images/clouds-supermap-sm.png"   // 换成你自己的云层贴图
+            });
+            scene.cloudBox = cloudBox;   // ← 让云层生效
+
+
+            const toolbar_sky = document.getElementById('toolbar-sky');
+            var CandSopen = document.getElementById('CandS-open');
+            CandSopen.addEventListener('click', async () => {
+                const isHidden = window.getComputedStyle(toolbar_sky).display === 'none';
+                toolbar_sky.style.display = isHidden ? 'block' : 'none';
+            });
+
+            $('#loadingbar').remove();
+            //#endregion
+        }
+
+        if (typeof SuperMap3D !== 'undefined') {
+            window.startupCalled = true;
+            onload(SuperMap3D);
+        }
+
+        //#region
+        // 获取菜单切换按钮和弹出菜单，点击菜单切换按钮时显示/隐藏弹出菜单
+        const menuToggle = document.getElementById('menu-toggle');
+        const popupMenu = document.getElementById('popup-menu');
+        menuToggle.addEventListener('click', () => {
+            popupMenu.classList.toggle('active');
+        });
+
+        function closeAllMenus() {
+            const allMenuItems = document.querySelectorAll('.menu-item');
+            const allSubmenus = document.querySelectorAll('.submenu');
+
+            allMenuItems.forEach(item => {
+                item.classList.remove('active');
+            });
+
+            allSubmenus.forEach(submenu => {
+                submenu.classList.remove('active');
+            });
+        }
+
+        var toggleButton = document.getElementById('toggle');
+        var consoleDiv = document.getElementById('console');
+        document.getElementById('toggleConsole').addEventListener('click', () => {
+            const console = document.getElementById('console');
+            console.style.display = console.style.display === 'none' ? 'block' : 'none';
+        });
+
+        const consoleOut = document.getElementById('console');
+        //#endregion
+
+        //#region 每套住宅应有卧室、起居室、厨房和卫生间菜单项
+        //定义变量
+        let zhuzhai_result;
+        let zhuzhai_txt;
+
+        // 获取建设要求菜单
+        var constructionRequirementsMenu = document.getElementById('construction-requirements-menu');
+        var constructionRequirementsSubmenu = document.getElementById('construction-requirements-submenu');
+        constructionRequirementsMenu.addEventListener('click', function (e) {
+            e.stopPropagation(); // 阻止事件冒泡
+            // closeAllMenus(); // 关闭所有已经打开的菜单项
+            constructionRequirementsSubmenu.classList.toggle('active');
+            constructionRequirementsMenu.classList.toggle('active');
+        });
+
+        // 获取每套住宅应有卧室、起居室、厨房和卫生间菜单项
+        var roomRequirements = document.getElementById('room-requirements');
+        roomRequirements.addEventListener('click', () => {
+            // 显示模态框
+            document.getElementById('myModal').style.display = 'block';
+            fenceEnt.show = true;
+            leidatexiao.show = true;
+        });
+
+        // 获取关闭按钮
+        var closeBtn = document.getElementById('closeModalBtn');
+        closeBtn.addEventListener('click', () => {
+            document.getElementById('myModal').style.display = 'none';
+        });
+
+        // 点击模态框外部关闭
+        window.addEventListener('click', (e) => {
+            if (e.target === document.getElementById('myModal')) {
+                document.getElementById('myModal').style.display = 'none';
+            }
+        });
+
+        document.querySelector('.submit-btn').addEventListener('click', () => {
+            const consoleOut = document.getElementById('console');
+            // 获取开关状态
+            const bedroomChecked = document.getElementById('bedroomSwitch').checked;
+            const livingRoomChecked = document.getElementById('livingRoomSwitch').checked;
+            const kitchenChecked = document.getElementById('kitchenSwitch').checked;
+            const bathroomChecked = document.getElementById('bathroomSwitch').checked;
+            
+            // 关闭模态框
+            document.getElementById('myModal').style.display = 'none';
+
+            // 判断是否符合要求
+            const compliant = bedroomChecked && livingRoomChecked && kitchenChecked && bathroomChecked;
+            const missingRooms = [];
+            if (!bedroomChecked) missingRooms.push('卧室');
+            if (!livingRoomChecked) missingRooms.push('起居室');
+            if (!kitchenChecked) missingRooms.push('厨房');
+            if (!bathroomChecked) missingRooms.push('卫生间');
+
+            const ts = new Date().toLocaleTimeString();
+            if (compliant) {
+                zhuzhai_result = '符合要求';
+                zhuzhai_txt = '该住宅均配有卧室、起居室、厨房和卫生间 - 符合规定';
+                consoleOut.append(`[${ts}] [住宅基本配置] ${zhuzhai_txt}`);
+            } else {
+                zhuzhai_result = '不符合要求';
+                zhuzhai_txt = `该住宅缺少 ${missingRooms.join('、')} - 不符合规定`;
+                consoleOut.append(`[${ts}] [住宅基本配置] ${zhuzhai_txt}`);
+            }
+            consoleOut.appendChild(document.createElement('br'));
+            setTimeout(() => {
+                leidatexiao.show = false;
+            }, 2000);
+        });
+        //#endregion
+
+        //#region 查询气候区域、
+        var cengshu = 10;
+        let xianzhigaodu = 0;
+        var livingEnvironmentMenu = document.getElementById('living-environment-menu');
+        var livingEnvironmentSubmenu = document.getElementById('living-environment-submenu');
+        livingEnvironmentMenu.addEventListener('click', function (e) {
+            e.stopPropagation(); // 阻止事件冒泡
+            // closeAllMenus(); // 关闭所有已经打开的菜单项
+            livingEnvironmentSubmenu.classList.toggle('active');
+            livingEnvironmentMenu.classList.toggle('active');
+        });
+
+        let fcClimate; // 缓存气候区数据
+        fetch('./climate7.geojson')
+            .then(r => r.json())
+            .then(d => { fcClimate = d; });
+
+        function getZone(lon, lat) {
+            const pt = turf.point([lon, lat]);
+            const hit = fcClimate.features.find(f => turf.booleanPointInPolygon(pt, f));
+            return hit ? hit.properties.name : '未落在气候区';
+        }
+
+        var qihouquyuControl = document.getElementById('qihouquyu-control');
+        qihouquyuControl.addEventListener('click', async () => {
+            leidatexiao.show = true;
+
+            const fs2F = await doSqlQueryfloor("标高='2F'", "DataSource:楼板");
+            console.log(fs2F);
+            if (!fs2F.length) return;
+            // 取 2F 任意一条记录的中心点坐标
+            const lon = fs2F[0].geometry.position.x;
+            const lat = fs2F[0].geometry.position.y;
+            qihouquyu = getZone(lon, lat);   // 计算并保存
+            console.log(qihouquyu);
+
+
+            if (!isNaN(lon) && !isNaN(lat)) {
+                const ts = new Date().toLocaleTimeString();
+                consoleOut.append(`[${ts}] 当前建筑经纬度：(${lon}, ${lat})，所在建筑气候区域为：${getZone(lon, lat)}`);
+                consoleOut.appendChild(document.createElement('br'));
+            }
+
+            setTimeout(() => {
+                leidatexiao.show = false;
+            }, 2000);
+        });
+        //#endregion 
+
+        //#region 住宅建筑高度控制最大值Ⅰ Ⅱ Ⅲ Ⅳ Ⅴ Ⅵ Ⅶ
+        let jianzhugaodu = 33;
+        var heightControl = document.getElementById('height-control');
+        const heightLimit = {
+            Ⅰ: { 1: 18, 2: 27, 3: 36, 4: 54, 5: 80 },
+            Ⅱ: { 1: 18, 2: 27, 3: 36, 4: 54, 5: 80 },
+            Ⅲ: { 1: 18, 2: 27, 3: 36, 4: 54, 5: 80 },
+            Ⅳ: { 1: 18, 2: 27, 3: 36, 4: 54, 5: 80 },
+            Ⅴ: { 1: 18, 2: 27, 3: 36, 4: 54, 5: 80 },
+            Ⅵ: { 1: 18, 2: 27, 3: 36, 4: 54, 5: 80 },
+            Ⅶ: { 1: 18, 2: 27, 3: 36, 4: 54, 5: 80 }
+        };
+        //判断是否高度合适
+        function isHeightExceed(zone, floors, height) {
+            const cat = floors <= 3 ? 1 :
+                floors <= 6 ? 2 :
+                    floors <= 9 ? 3 :
+                        floors <= 17 ? 4 : 5;
+            const limit = heightLimit[zone]?.[cat];
+            xianzhigaodu = limit;
+            consoleOut.append(`[高度控制] 限制高度 = ${limit} 米`); consoleOut.appendChild(document.createElement('br'));
+            return limit ? height > limit : null;
+        }
+        heightControl.addEventListener('click', async () => {
+            leidatexiao.show = true;
+            
+            const consoleOut = document.getElementById('console');
+            const ts = new Date().toLocaleTimeString();
+            try {
+                // 1. 取楼板算层数
+                const fsFloor = await doSqlQueryfloor("1=1", "DataSource:楼板");
+                if (!fsFloor.length) {
+                    consoleOut.append('[高度控制] 无楼板'); consoleOut.appendChild(document.createElement('br')); return;
+                }
+
+                const validFloors = new Set(fsFloor.map(f => f.fieldValues[20]).filter(v => /^\d+F$/i.test(v)));
+                const floors = validFloors.size;
+                cengshu = floors;
+                consoleOut.append(`[${ts}] [高度控制] 总层数：${floors}`); consoleOut.appendChild(document.createElement('br'));
+
+                // 2. 算高度
+                const idx = fsFloor[0].fieldNames.indexOf("SMMAXZ");
+                if (idx === -1) {
+                    consoleOut.append('[高度控制] 无 SMMAXZ 字段'); consoleOut.appendChild(document.createElement('br')); return;
+                }
+                const height = Math.max(...fsFloor.map(f => +f.fieldValues[idx]));
+
+                // 3. 判断
+                const zone = qihouquyu;
+                const exceed = isHeightExceed(zone, floors, height);
+                const limit = heightLimit[zone]?.[floors <= 3 ? 1 : floors <= 6 ? 2 : floors <= 9 ? 3 : floors <= 17 ? 4 : 5];
+                consoleOut.append(`[${ts}] [高度控制] 实际高度：${height} m，限制：${limit} m`);
+                consoleOut.appendChild(document.createElement('br'));
+                consoleOut.append(`[${ts}] [高度控制] ${exceed ? '不合格' : '合格'}`);
+                consoleOut.appendChild(document.createElement('br'));
+                //建筑高度
+                jianzhugaodu = height;
+                setTimeout(() => {
+                leidatexiao.show = false;
+            }, 3000);
+            } catch (e) {
+                consoleOut.append('[高度控制] 查询失败：' + e); consoleOut.appendChild(document.createElement('br'));
+            }
+        });
+
+        // SQL查询
+        function doSqlQueryfloor(sqlStr, data) {
+            return new Promise((resolve, reject) => {
+                const sqlParameter = {
+                    datasetNames: [data],
+                    getFeatureMode: "SQL",
+                    queryParameter: { attributeFilter: sqlStr }
+                };
+
+                $.ajax({
+                    type: "post",
+                    url: "http://localhost:8090/iserver/services/data-BIMGongZuoKongJian/rest/data/featureResults.rjson?returnContent=true",
+                    data: JSON.stringify(sqlParameter),
+                    success: result => {
+                        const resultObj = JSON.parse(result);
+                        resolve(resultObj.featureCount > 0 ? resultObj.features : []);
+                    },
+                    error: msg => {
+                        console.error(msg);
+                        resolve([]);          // 出错也返回空数组，方便后续处理
+                    }
+                });
+            });
+        }
+
+        function onQueryComplete(features) {
+            if (features.length === 0) {
+                alert("没有符合条件的建筑！");
+                return;
+            } else {
+                alert("查询到了");
+            }
+            //应该写出查找标高序号的方法，这里假定是20 
+            const validFloors = new Set(
+                features
+                    .map(f => f.fieldValues[20])
+                    .filter(v => /^\d+F$/i.test(v))     // 正则：只保留 “数字+F”
+            );
+            console.log("有效楼层列表：", [...validFloors].sort());
+            console.log("总层数：", validFloors.size);
+            floornumber = validFloors.size;
+        }
+
+        //#endregion
+
+        //#region 建筑容积率控制
+        //定义变量
+        let rongjilv_result;
+        let rognjilv_txt;
+        const plotRatioStandard = {
+            'Ⅰ': { '低层': 1.0, '多层I类': 1.4, '多层II类': 1.7, '高层I类': 2.4, '高层II类': 2.8 },
+            'Ⅱ': { '低层': 1.0, '多层I类': 1.5, '多层II类': 1.9, '高层I类': 2.6, '高层II类': 2.9 },
+            'Ⅲ': { '低层': 1.0, '多层I类': 1.6, '多层II类': 2.1, '高层I类': 2.8, '高层II类': 3.1 },
+            'Ⅳ': { '低层': 1.0, '多层I类': 1.6, '多层II类': 2.1, '高层I类': 2.8, '高层II类': 3.1 },
+            'Ⅴ': { '低层': 1.0, '多层I类': 1.6, '多层II类': 2.1, '高层I类': 2.8, '高层II类': 3.1 },
+            'Ⅵ': { '低层': 1.0, '多层I类': 1.5, '多层II类': 1.9, '高层I类': 2.6, '高层II类': 2.9 },
+            'Ⅶ': { '低层': 1.0, '多层I类': 1.4, '多层II类': 1.7, '高层I类': 2.4, '高层II类': 2.8 }
+        };
+
+        // 根据层数确定类别
+        function getLevelCategory(floors) {
+            if (floors <= 3) return '低层';
+            if (floors <= 6) return '多层I类';
+            if (floors <= 9) return '多层II类';
+            if (floors <= 17) return '高层I类';
+            return '高层II类';
+        }
+
+        // 判断容积率是否合格
+        function isPlotRatioCompliant(zone, floors, totalArea, plannedArea) {
+            const category = getLevelCategory(floors);
+            const maxPlotRatio = plotRatioStandard[qihouquyu]?.[getLevelCategory(cengshu)] ?? 0;
+            const plotRatio = totalArea / plannedArea;
+            return plotRatio <= maxPlotRatio;
+        }
+        var plannedArea = 0;
+        var plotratioControl = document.getElementById('plotratio-control');
+        plotratioControl.addEventListener('click', async () => {
+            leidatexiao.show = true;
+            
+            try {
+                const fs2F = await doSqlQueryfloor("标高='2F'", "DataSource:楼板");
+                if (!fs2F.length) {
+                    consoleOut.append('[容积率] 2F 无楼板'); consoleOut.appendChild(document.createElement('br')); return;
+                }
+                const idxSm = fs2F[0].fieldNames.indexOf("SMMAXZ");
+                if (idxSm === -1) {
+                    consoleOut.append('[容积率] 无 SMMAXZ 字段'); consoleOut.appendChild(document.createElement('br')); return;
+                }
+                const sm = Number(fs2F[0].fieldValues[idxSm]);
+                if (isNaN(sm)) {
+                    consoleOut.append('[容积率] SMMAXZ 值不是数字'); consoleOut.appendChild(document.createElement('br')); return;
+                }
+
+                if (sm <= 2.2) {
+                    consoleOut.append('[容积率] SmMaxZ ≤ 2.2'); consoleOut.appendChild(document.createElement('br')); return;
+                }
+
+                let totalArea = 0;
+                for (let i = 1; i <= cengshu; i++) {
+                    const floor = `${i}F`;
+                    const fs = await doSqlQueryfloor(`标高='${floor}'`, "DataSource:楼板");
+                    if (!fs.length) continue;
+
+                    const idxArea = fs[0].fieldNames.indexOf("面积");
+                    const idxType = fs[0].fieldNames.indexOf("类型");
+                    if (idxArea === -1 || idxType === -1) continue;
+
+                    const floorArea = fs.reduce((sum, f) => {
+                        const t = f.fieldValues[idxType];
+                        return sum + (t !== '种植屋面_1500' && t !== '种植屋面_600' ? Number(f.fieldValues[idxArea]) : 0);
+                    }, 0);
+                    totalArea += floorArea;
+                }
+
+                consoleOut.append(`[容积率] 1~10 层楼板总面积：${totalArea.toFixed(2)} m²`); consoleOut.appendChild(document.createElement('br'));
+
+                if (plannedArea === 0) {
+                    try {
+                        plannedArea = await askLandArea();
+                    } catch {
+                        return; // 用户取消
+                    }
+                    if (isNaN(plannedArea)) {
+                        consoleOut.append('[容积率] 建设用地面积输入无效'); consoleOut.appendChild(document.createElement('br')); return;
+                    }
+                }
+                const ts = new Date().toLocaleTimeString();
+                const plotRatio = totalArea / plannedArea;
+                consoleOut.append(`[${ts}] [容积率] 容积率：${plotRatio.toFixed(2)}`); consoleOut.appendChild(document.createElement('br'));
+                const maxPlotRatio = plotRatioStandard[qihouquyu]?.[getLevelCategory(cengshu)] ?? 0;
+                const isCompliant = plotRatio <= maxPlotRatio; // 判断是否合格
+                consoleOut.append(`[${ts}] [容积率] ${isCompliant ? '合格' : '不合格'}，最大容积率：${maxPlotRatio.toFixed(2)}`); consoleOut.appendChild(document.createElement('br'));
+                    
+                //用变量保存结果
+                rongjilv_result = plotRatio <= maxPlotRatio ? '符合要求' : '不符合要求';
+                rognjilv_txt = `容积率为${plotRatio.toFixed(1)}%，${plotRatio <= maxPlotRatio ? '小于' : '大于'}限值${maxPlotRatio.toFixed(1)}%`;
+                setTimeout(() => {
+                leidatexiao.show = false;
+            }, 3000);
+            } catch (e) {
+                consoleOut.append('[容积率] 查询失败：' + e); consoleOut.appendChild(document.createElement('br'));
+            }
+        });
+
+        /* 2.1 打开弹窗并返回 Promise */
+        function askLandArea() {
+            return new Promise((resolve, reject) => {
+                const modal = document.getElementById('landAreaModal');
+                const input = document.getElementById('land-area-input');
+                const okBtn = document.getElementById('land-confirm');
+                const cancelBtn = document.getElementById('land-cancel');
+
+                // 显示弹窗 & 自动聚焦
+                modal.style.display = 'flex';
+                input.focus();
+                input.value = '';
+
+                // 确认
+                okBtn.onclick = () => {
+                    const val = parseFloat(input.value);
+                    if (!isNaN(val) && val > 0) {
+                        modal.style.display = 'none';
+                        resolve(val);
+                    } else {
+                        alert('请输入有效的正数！');
+                    }
+                };
+                // 取消 / 关闭
+                cancelBtn.onclick = () => {
+                    modal.style.display = 'none';
+                    reject('用户取消输入');
+                };
+                // 点击遮罩关闭
+                modal.onclick = e => {
+                    if (e.target === modal) {
+                        modal.style.display = 'none';
+                        reject('用户取消输入');
+                    }
+                };
+            });
+        }
+        //#endregion
+
+        //#region 建筑密度最大值控制
+        //定义变量
+        let jianzhumidu_result;
+        let jianzhumidu_txt;
+        const buildingDensityStandard = {
+            'Ⅰ': { '低层': 35, '多层I类': 28, '多层II类': 25, '高层I类': 20, '高层II类': 20 },
+            'Ⅱ': { '低层': 40, '多层I类': 30, '多层II类': 28, '高层I类': 20, '高层II类': 20 },
+            'Ⅲ': { '低层': 43, '多层I类': 32, '多层II类': 30, '高层I类': 22, '高层II类': 22 },
+            'Ⅳ': { '低层': 43, '多层I类': 32, '多层II类': 30, '高层I类': 22, '高层II类': 22 },
+            'Ⅴ': { '低层': 43, '多层I类': 32, '多层II类': 30, '高层I类': 22, '高层II类': 22 },
+            'Ⅵ': { '低层': 43, '多层I类': 32, '多层II类': 30, '高层I类': 22, '高层II类': 22 },
+            'Ⅶ': { '低层': 43, '多层I类': 32, '多层II类': 30, '高层I类': 22, '高层II类': 22 }
+        };
+
+        // 判断建筑密度是否合格
+        function isDensityCompliant(zone, floors, density) {
+            const category = getLevelCategory(floors);
+            const maxDensity = buildingDensityStandard[zone][category];
+            return density <= maxDensity;
+        }
+        var buildingdensityControl = document.getElementById('buildingdensity-control');
+        buildingdensityControl.addEventListener('click', async () => {
+            leidatexiao.show = true;
+            
+            try {
+                const fs1F = await doSqlQueryfloor("(标高='1F' OR 标高='B1') AND SMMAXZ>0", "DataSource:楼板");
+                if (!fs1F.length) {
+                    consoleOut.append('[建筑密度] 1F 无楼板'); consoleOut.appendChild(document.createElement('br')); return;
+                }
+                const idxArea = fs1F[0].fieldNames.indexOf("面积");
+                if (idxArea === -1) {
+                    consoleOut.append('[建筑密度] 无 面积 字段'); consoleOut.appendChild(document.createElement('br')); return;
+                }
+                const baseArea = fs1F.reduce((sum, f) => sum + Number(f.fieldValues[idxArea]), 0);
+                consoleOut.append(`[建筑密度] 建筑基地总面积：${baseArea.toFixed(2)} m²`); consoleOut.appendChild(document.createElement('br'));
+
+                if (plannedArea === 0) {
+                    try {
+                        plannedArea = await askLandArea();
+                    } catch {
+                        return; // 用户取消
+                    }
+                    if (isNaN(plannedArea)) {
+                        consoleOut.append('[建筑密度] 建设用地面积输入无效'); consoleOut.appendChild(document.createElement('br')); return;
+                    }
+                }
+                const ts = new Date().toLocaleTimeString();
+                const density = baseArea / plannedArea;
+                consoleOut.append(`[${ts}] [建筑密度] 建筑密度：${(density * 100).toFixed(2)}%`); consoleOut.appendChild(document.createElement('br'));
+                // 判断建筑密度是否合格
+                const compliant = isDensityCompliant(qihouquyu, cengshu, density * 100);
+                const maxDensity = buildingDensityStandard[qihouquyu][getLevelCategory(cengshu)];
+                consoleOut.append(`[${ts}] [建筑密度] ${compliant ? '合格' : '不合格'}，最大建筑密度：${maxDensity.toFixed(2)}%`); consoleOut.appendChild(document.createElement('br'));
+
+                //用变量保存结果
+                jianzhumidu_result = compliant ? '符合要求' : '不符合要求';
+                jianzhumidu_txt = `建筑密度为${(density * 100).toFixed(1)}%，${compliant ? '小于' : '大于'}限值${maxDensity.toFixed(1)}%`;
+
+                setTimeout(() => {
+                leidatexiao.show = false;
+            }, 3000);
+            } catch (e) {
+                consoleOut.append('[建筑密度] 查询失败：' + e); consoleOut.appendChild(document.createElement('br'));
+            }
+        });
+        //#endregion
+
+        //#region 绿地率最小值控制
+        //定义变量
+        let ludilv_result;
+        let ludilv_txt;
+        const greeningMinStandard = {
+            'Ⅰ': { '低层': 30, '多层I类': 30, '多层II类': 30, '高层I类': 35, '高层II类': 35 },
+            'Ⅱ': { '低层': 28, '多层I类': 30, '多层II类': 30, '高层I类': 35, '高层II类': 35 },
+            'Ⅲ': { '低层': 25, '多层I类': 30, '多层II类': 30, '高层I类': 35, '高层II类': 35 },
+            'Ⅳ': { '低层': 25, '多层I类': 30, '多层II类': 30, '高层I类': 35, '高层II类': 35 },
+            'Ⅴ': { '低层': 25, '多层I类': 30, '多层II类': 30, '高层I类': 35, '高层II类': 35 },
+            'Ⅵ': { '低层': 25, '多层I类': 30, '多层II类': 30, '高层I类': 35, '高层II类': 35 },
+            'Ⅶ': { '低层': 25, '多层I类': 30, '多层II类': 30, '高层I类': 35, '高层II类': 35 }
+        };
+
+        var GreeningrateControl = document.getElementById('Greeningrate-control');
+        GreeningrateControl.addEventListener('click', async () => {
+            leidatexiao.show = true;
+            
+            try {
+                const fs1F = await doSqlQueryfloor("标高='1F' AND 类型='种植屋面_1500'", "DataSource:楼板");
+                if (!fs1F.length) {
+                    consoleOut.append('[绿地率] 没有找到符合条件的楼板要素'); consoleOut.appendChild(document.createElement('br')); return;
+                }
+                const idxArea = fs1F[0].fieldNames.indexOf("面积");
+                if (idxArea === -1) {
+                    consoleOut.append('[绿地率] 无 面积 字段'); consoleOut.appendChild(document.createElement('br')); return;
+                }
+                const ts = new Date().toLocaleTimeString();
+                const totalGreenArea = fs1F.reduce((sum, f) => sum + Number(f.fieldValues[idxArea]), 0);
+                consoleOut.append(`[${ts}] [绿地率] 绿地总面积：${totalGreenArea.toFixed(2)} m²`); consoleOut.appendChild(document.createElement('br'));
+
+                if (plannedArea === 0) {
+                    try {
+                        plannedArea = await askLandArea();
+                    } catch {
+                        return; // 用户取消
+                    }
+                    if (isNaN(plannedArea)) {
+                        consoleOut.append('[绿地率] 建设用地面积输入无效'); consoleOut.appendChild(document.createElement('br')); return;
+                    }
+                }
+
+                const greeningRate = (totalGreenArea / plannedArea) * 100;
+                consoleOut.append(`[${ts}] [绿地率] 绿地率：${greeningRate.toFixed(2)}%`); consoleOut.appendChild(document.createElement('br'));
+                const minGreen = greeningMinStandard[qihouquyu]?.[getLevelCategory(cengshu)] ?? 30;
+                const compliant = greeningRate >= minGreen;
+                consoleOut.append(`[${ts}] [绿地率] ${compliant ? '合格' : '不合格'}，最小绿地率：${minGreen}%`); consoleOut.appendChild(document.createElement('br'));
+
+                //用变量保存结果
+                ludilv_result = compliant ? '符合要求' : '不符合要求';
+                ludilv_txt = `绿地率为${greeningRate.toFixed(1)}%，${compliant ? '大于' : '小于'}限值${minGreen.toFixed(1)}%`;
+                setTimeout(() => {
+                leidatexiao.show = false;
+            }, 3000);
+            } catch (error) {
+                consoleOut.append('[绿地率] 查询失败：' + error); consoleOut.appendChild(document.createElement('br'));
+            }
+        });
+        //#endregion
+
+        //#region 卧室面积控制
+        //定义变量
+        let woshi_result;
+        let woshi_txt;
+        var architecturalspacemenuMenu = document.getElementById('architectural-space-menu');
+        var architecturalspacemenuSubmenu = document.getElementById('architectural-space-submenu');
+        architecturalspacemenuMenu.addEventListener('click', function (e) {
+            e.stopPropagation(); // 阻止事件冒泡
+            // closeAllMenus(); // 关闭所有已经打开的菜单项
+            architecturalspacemenuSubmenu.classList.toggle('active');
+            architecturalspacemenuMenu.classList.toggle('active');
+        });
+
+        var BedroomusableareaControl = document.getElementById('Bedroomusablearea-control');
+        BedroomusableareaControl.addEventListener('click', async () => {
+            leidatexiao.show = true;
+            
+            const length = await askInput("请输入卧室的长度（米）：");
+            const width = await askInput("请输入卧室的宽度（米）：");
+            if (isNaN(length) || isNaN(width)) {
+                consoleOut.append("[卧室面积控制] 请输入有效数字"); consoleOut.appendChild(document.createElement('br'));
+                return;
+            }
+
+            const area = length * width;
+            const isLivingRoom = confirm("该卧室是否同时兼起居室？");
+
+            const short = Math.min(length, width);
+            const shortOK = short >= 1.8;
+            const shortMsg = shortOK ? "" : "，短边不足1.8 m";
+            
+            // 判断面积是否符合要求
+            const areaStandard = isLivingRoom ? 9 : 5;
+            const areaOK = area >= areaStandard;
+            const areaMsg = areaOK ? "" : `，不符合规定（需 ≥ ${areaStandard} m²）`;
+
+            // 综合判断是否合格
+            const compliant = areaOK && shortOK;
+            const resultMsg = compliant ? "符合规定" : "不符合规定";
+
+            const line = `[${new Date().toLocaleTimeString()}] 卧室面积：${area.toFixed(2)} m²` +
+                (isLivingRoom ? "（兼起居室）" : "（普通卧室）") +
+                areaMsg + shortMsg;
+
+            const p = document.createElement('p');
+            p.textContent = line;
+            document.getElementById('console').appendChild(p);
+            
+            //用变量保存结果
+            woshi_result = compliant ? '符合要求' : '不符合要求';
+            woshi_txt = `该卧室面积为 ${area.toFixed(2)} m²，${resultMsg}`;
+            setTimeout(() => {
+                leidatexiao.show = false;
+            }, 3000);
+        });
+
+        function askInput(promptText) {
+            return new Promise((resolve, reject) => {
+                const modal = document.getElementById('landAreaModal');
+                const input = document.getElementById('land-area-input');
+                const okBtn = document.getElementById('land-confirm');
+                const cancelBtn = document.getElementById('land-cancel');
+
+                // 显示弹窗 & 自动聚焦
+                modal.style.display = 'flex';
+                input.focus();
+                input.value = '';
+                input.placeholder = promptText;
+
+                // 确认
+                okBtn.onclick = () => {
+                    const val = parseFloat(input.value);
+                    if (!isNaN(val) && val > 0) {
+                        modal.style.display = 'none';
+                        resolve(val);
+                    } else {
+                        alert('请输入有效的正数！');
+                    }
+                };
+                // 取消 / 关闭
+                cancelBtn.onclick = () => {
+                    modal.style.display = 'none';
+                    reject('用户取消输入');
+                };
+                // 点击遮罩关闭
+                modal.onclick = e => {
+                    if (e.target === modal) {
+                        modal.style.display = 'none';
+                        reject('用户取消输入');
+                    }
+                };
+            });
+        }
+        //#endregion
+
+        //#region 居住空间地下限制验证
+        //定义变量
+        let zhujukongjian_result;
+        let zhujukongjian_txt;
+        var UnderrestrictionVerification = document.getElementById('Underrestriction-verification');
+        UnderrestrictionVerification.addEventListener('click', async () => {
+            leidatexiao.show = true;
+            
+            const console = document.getElementById('console');
+            /********* 1. 找出所有 SMMAXZ < 0 的楼板 *********/
+            const negativeSlabs = await doSqlQueryfloor("SMMAXZ < 0", "DataSource:楼板");
+            if (!negativeSlabs || negativeSlabs.length === 0) {
+                alert("未发现地下楼板，无需检查。");
+                //用变量保存结果
+                zhujukongjian_result = '符合要求';
+                zhujukongjian_txt = '未发现地下楼板，无需检查。';
+                return;
+            }
+            window.console.log(negativeSlabs)
+
+            const badIds = [];      // 违规要素 id
+            const badNames = new Set(); // 违规类型名称（去重用）
+            for (const rec of negativeSlabs) {
+                const idxId = rec.fieldNames.indexOf("id");
+                const idxType = rec.fieldNames.indexOf("类型");
+
+                const id = rec.fieldValues[idxId];
+                const typeVal = (rec.fieldValues[idxType] || "").trim();
+
+                if (["卧室", "起居室", "厨房"].includes(typeVal)) {
+                    badIds.push(id);
+                    badNames.add(typeVal);
+                }
+            }
+
+            // 假设 badIds 与 badNames 已经统计好
+            if (badIds.length) {
+                //highlightFeatures(badIds);   // ← 请换成你实际的高亮函数
+                const text = `发现 ${badIds.length} 处违规 — ${[...badNames].join('、')} 布置在地下室`;
+                console.append(`[${new Date().toLocaleTimeString()}] [地下室] ${text}`);
+                console.appendChild(document.createElement('br'));
+                //用变量保存结果
+                zhujukongjian_result = '不符合要求';
+                zhujukongjian_txt = text;
+            } else {
+                const text = `未发现卧室、起居室、厨房布置在地下室 — 符合规定`;
+                consoleOut.append(`[${new Date().toLocaleTimeString()}] [地下室] ${text}`);
+                console.appendChild(document.createElement('br'));
+                //用变量保存结果
+                zhujukongjian_result = '符合要求';
+                zhujukongjian_txt = text;
+            }
+            setTimeout(() => {
+                leidatexiao.show = false;
+            }, 3000);
+        });
+        //#endregion
+
+        //#region 卫生间垂直布局冲突检查
+        //定义变量
+        let weishengjian_result;
+        let weishengjian_txt;
+        var BathVLCheck = document.getElementById('BathVL-Check');
+        BathVLCheck.addEventListener('click', async () => {
+            leidatexiao.show = true;
+            
+            const consoleOut = document.getElementById('console');
+            //1,查询卫生间楼板的存在的最低层
+            let baseFloor = null;
+            let baseBaths = [];
+
+            for (let i = 0; i < cengshu; i++) {
+                const floorName = `${i + 1}F`;
+                const sql = `标高='${floorName}' AND (类型='地砖楼面_380-卫生间' OR 类型='地砖楼面_100-卫生间')`;
+                const fs = await doSqlQueryfloor(sql, 'DataSource:楼板');
+
+                if (fs.length) {
+                    baseFloor = i;
+                    fs.forEach(f => {
+                        const g = f.geometry;
+                        if (g && g.position) {
+                            baseBaths.push({ x: g.position.x, y: g.position.y });
+                        }
+                    });
+                    window.console.log(floorName)
+                    break;
+                }
+            }
+
+            if (baseFloor === null) {
+                alert('整栋楼未找到任何卫生间楼板，无需检查');
+                weishengjian_result = '符合要求';
+                weishengjian_txt = '整栋楼未找到任何卫生间，无需检查。';
+                return;
+            }
+
+            //2，检索
+            const floorLow = `${baseFloor + 1}F`;
+            const floorHigh = `${baseFloor + 2}F`;
+
+            const sqlLayer = f => `标高='${f}' AND (类型='地砖楼面_380-卫生间' OR 类型='地砖楼面_100-卫生间')`;
+
+            const [fsLow, fsHigh] = await Promise.all([
+                doSqlQueryfloor(sqlLayer(floorLow), 'DataSource:楼板'),
+                doSqlQueryfloor(sqlLayer(floorHigh), 'DataSource:楼板')
+            ]);
+
+            const pickXY = arr => arr
+                .filter(f => f.geometry?.position)
+                .map(f => ({ x: f.geometry.position.x, y: f.geometry.position.y }));
+
+            const bathsLow = pickXY(fsLow);
+            const bathsHigh = pickXY(fsHigh);
+            window.console.log(bathsLow, bathsHigh)
+
+            // 第三步：从 baseFloor+2 开始，逐层向上检查
+            const tolerance = 0.00001;
+            const bad = [];
+            window.console.log(baseFloor)
+            for (let cur = baseFloor + 1; cur < cengshu; cur++) {
+                const curF = `${cur + 1}F`;
+                const prevF = `${cur}F`;
+
+                // 当前层 & 下一层卫生间坐标
+                const [fsCur, fsPrev] = await Promise.all([
+                    doSqlQueryfloor(sqlLayer(curF), 'DataSource:楼板'),
+                    doSqlQueryfloor(sqlLayer(prevF), 'DataSource:楼板')
+                ]);
+
+                const curPts = pickXY(fsCur);
+                const prevPts = pickXY(fsPrev);
+
+                // 逐块比对
+                curPts.forEach((p, idx) => {
+                    const ok = prevPts.some(q =>
+                        Math.abs(q.x - p.x) < tolerance && Math.abs(q.y - p.y) < tolerance
+                    );
+                    const msg = `[${new Date().toLocaleTimeString()}] ${curF}-${idx + 1} ${ok ? '对齐' : '未对齐'} ${prevF}`;
+                    consoleOut.append(msg);
+                    consoleOut.appendChild(document.createElement('br'));
+                    if (!ok) {
+                        bad.push(`${curF}-${idx + 1} 未对齐`);
+                    }
+                });
+            }
+
+            // 结果
+            if (bad.length) {
+                const resultText = `发现 ${bad.length} 处未对齐 — ${bad.join('、')}`;
+                weishengjian_result = '不符合要求';
+                weishengjian_txt = resultText;
+                consoleOut.append(`[${new Date().toLocaleTimeString()}] [卫生间] ${resultText}`);
+                consoleOut.appendChild(document.createElement('br'));
+            } else {
+                const resultText = `所有楼层卫生间均未布置于其他住户的卧室、起居室、厨房或餐厅的上层 — 符合规定`;
+                weishengjian_result = '符合要求';
+                weishengjian_txt = resultText;
+                consoleOut.append(`[${new Date().toLocaleTimeString()}] [卫生间] ${resultText}`);
+                consoleOut.appendChild(document.createElement('br'));
+            }
+            setTimeout(() => {
+                leidatexiao.show = false;
+            }, 3000);
+        });
+
+        //#endregion
+
+        //#region 5%开窗面积检查
+        var TEmenu = document.getElementById('thermal-environment-menu');
+        var TESubmenu = document.getElementById('thermal-environment-submenu');
+        TEmenu.addEventListener('click', function (e) {
+            e.stopPropagation(); // 阻止事件冒泡
+            //    closeAllMenus(); // 关闭所有已经打开的菜单项
+            TESubmenu.classList.toggle('active');
+            TEmenu.classList.toggle('active');
+        });
+        //#endregion
+
+        //#region 日照时长
+        var RZSCCheck = document.getElementById('RZSC-control');
+        RZSCCheck.addEventListener('click', async () => {
+            const ok = confirm('日照时长是否合格？');
+            const result = ok ? '合格' : '不合格';
+            console.log('日照判定：' + result);
+        });
+        //#endregion
+
+        //#region 顶部菜单栏
+        document.querySelectorAll('.top-menu-item').forEach(item => {
+            item.addEventListener('click', e => {
+                e.stopPropagation();
+                const dd = item.querySelector('.top-dropdown');
+                document.querySelectorAll('.top-dropdown').forEach(d => d !== dd && (d.style.display = 'none'));
+                dd.style.display = dd.style.display === 'block' ? 'none' : 'block';
+            });
+        });
+        window.addEventListener('click', () => document.querySelectorAll('.top-dropdown').forEach(d => d.style.display = 'none'));
+        //#endregion
+
+        //#region 加载BIM数据
+        var FileOpen = document.getElementById('file-open');
+        FileOpen.addEventListener('click', async () => {
+            const modal = document.getElementById('urlInputModal');
+            const urlIn = document.getElementById('modal-url');
+            const dbIn = document.getElementById('modal-db');
+            const BIMIn = document.getElementById('modal-BIM');
+
+            modal.style.display = 'flex';
+            urlIn.value = '';
+            dbIn.value = '';
+            BIMIn.value = '';
+
+            /* 确认按钮 */
+            document.getElementById('modal-confirm').onclick = () => {
+                url = urlIn.value.trim();
+                db = dbIn.value.trim();
+                BIM = dbIn.value.trim();
+                if (!url || !db) {
+                    modal.style.display = 'none';
+                    init(SuperMap3D, scene, viewer);
+                } else {
+                    modal.style.display = 'none';
+                    /* ↓ 这里放你自己的后续处理 ↓ */
+                    Qurl = url;
+                    Qdb = db;
+                    QBIM = BIM;
+                    init(SuperMap3D, scene, viewer);
+                }
+
+            };
+
+            /* 取消按钮 */
+            document.getElementById('modal-cancel').onclick = () => {
+                modal.style.display = 'none';
+            };
+            // init(SuperMap3D, scene, viewer);
+
+        });
+        //#endregion 加载BIM数据
+
+        //#region 加载项目规范
+        var helpmenu = document.getElementById('help-menu');
+        var helpSubmenu = document.getElementById('help-submenu');
+        helpmenu.addEventListener('click', function (e) {
+            e.stopPropagation(); // 阻止事件冒泡
+            //  closeAllMenus(); // 关闭所有已经打开的菜单项
+            helpSubmenu.classList.toggle('active');
+            helpmenu.classList.toggle('active');
+        });
+
+        var filecontrol = document.getElementById('file-control');
+        filecontrol.addEventListener('click', () => {
+            overlay.classList.add('show');
+        });
+        closeBtn.onclick = () => overlay.classList.remove('show');
+        overlay.onclick = e => { if (e.target === overlay) overlay.classList.remove('show'); };
+        //#endregion 加载项目规范
+
+        //#region 顶部菜单，书签功能
+        var bookmarksOpen = document.getElementById('bookmarks-add');
+        bookmarksOpen.addEventListener('click', async () => {
+            // 保存相机参数
+            const cart = SuperMap3D.Cartographic.fromCartesian(viewer.camera.position);
+            const bookmark = {
+                name: `书签-${Date.now()}`,
+                lon: SuperMap3D.Math.toDegrees(cart.longitude),
+                lat: SuperMap3D.Math.toDegrees(cart.latitude),
+                height: cart.height,
+                heading: viewer.camera.heading,
+                pitch: viewer.camera.pitch,
+                roll: viewer.camera.roll
+            };
+
+            // 存入数组并本地持久
+            let list = JSON.parse(localStorage.getItem('bookmarks') || '[]');
+            list.push(bookmark);
+            localStorage.setItem('bookmarks', JSON.stringify(list));
+
+            // 动态添加 <li>
+            addBookmarkLi(bookmark);
+
+        });
+        //* 2. 动态生成 <li> 并绑定 flyTo 
+        function addBookmarkLi(bm) {
+            const li = document.createElement('li');
+            li.textContent = "书签序列1";
+            li.addEventListener('click', () => {
+                viewer.camera.flyTo({
+                    destination: SuperMap3D.Cartesian3.fromDegrees(bm.lon, bm.lat, bm.height),
+                    orientation: { heading: bm.heading, pitch: bm.pitch, roll: bm.roll },
+                    duration: 1.5
+                });
+            });
+            document.querySelector('#bookmarks-dd ul').appendChild(li);
+        }
+
+        /* 3. 页面加载时把已有书签渲染出来 */
+        (function loadBookmarks() {
+            const list = JSON.parse(localStorage.getItem('bookmarks') || '[]');
+            list.forEach(addBookmarkLi);
+        })();
+        //#endregion
+
+        //#region 删除书签
+        var bookmarksDel = document.getElementById('bookmarks-del');
+        bookmarksDel.addEventListener('click', async () => {
+            localStorage.removeItem('bookmarks');
+            document.querySelectorAll('#bookmarks-dd ul li:not(:first-child):not(:nth-child(2))').forEach(li => li.remove());
+        });
+        //#endregion 删除书签
+
+
+
+
+
+        //修改后的，加了输出窗口
+        //#region 外窗防护评估（4.1.15，自定义输出）
+        //定义变量
+        let waichuang_result;
+        let waichuang_txt;
+        function doSqlQueryfloor1(sqlStr, data) {
+            return new Promise(resolve => {
+                const sqlParameter = {
+                    datasetNames: [data],
+                    getFeatureMode: "SQL",
+                    queryParameter: { attributeFilter: sqlStr }
+                };
+                $.ajax({
+                    type: "post",
+                    url: "http://localhost:8090/iserver/services/data-BIMGongZuoKongJian/rest/data/featureResults.rjson?returnContent=true",
+                    data: JSON.stringify(sqlParameter),
+                    contentType: "application/json",
+                    success: result => {
+                        const obj = JSON.parse(result);
+                        resolve(obj.featureCount > 0 ? obj.features : []);
+                    },
+                    error: msg => {
+                        console.error("doSqlQueryfloor 查询失败！", msg);
+                        resolve([]);
+                    }
+                });
+            });
+        }
+        document.getElementById('window-protect-control').addEventListener('click', () => {
+            compareWindowProtection();
+        });
+
+        async function compareWindowProtection() {
+            // 1. 拉取 2F/3F 的“玻璃嵌板-NW”
+            const windows = await doSqlQueryfloor1(
+                "ElementName = '玻璃嵌板-NW' AND 标高 IN ('2F','3F')",
+                "DataSource:幕墙嵌板"
+            );
+            // 2. 拉取防护构件
+            const protects = await doSqlQueryfloor1(
+                "1 = 1",
+                "DataSource:外窗防护构件"
+            );
+
+            // 建立映射
+            const protectMap = {};
+            protects.forEach(f => {
+                const names = f.fieldNames, vals = f.fieldValues;
+                const pid = vals[names.indexOf("SmID")];
+                const ph = parseFloat(vals[names.indexOf("Height(m)")] || vals[names.indexOf("高度(m)")] || 0);
+                if (!isNaN(ph)) {
+                    (protectMap[pid] || (protectMap[pid] = [])).push(ph);
+                }
+            });
+
+            // 3. 评估
+            const bad = [];
+            windows.forEach(f => {
+                const names = f.fieldNames, vals = f.fieldValues;
+                const smid = vals[names.indexOf("SmID")];
+                const sillHeight = parseFloat(vals[names.indexOf("无连接高度(m)")] || vals[names.indexOf("无连接高度")] || 0);
+                if (sillHeight >= 0.9) return;
+                const phs = protectMap[smid] || [];
+                if (!phs.length) {
+                    bad.push(`SmID ${smid}: 无防护构件 (净高 ${sillHeight}m)`);
+                } else {
+                    const maxPh = Math.max(...phs);
+                    if (maxPh < 0.9) {
+                        bad.push(`SmID ${smid}: 净高 ${sillHeight}m，防护 ${maxPh.toFixed(3)}m < 0.90m`);
+                    }
+                }
+            });
+
+            // 4. 自定义窗口输出
+            if (bad.length) {
+                const resultText = `发现 ${bad.length} 处违规，包括：${bad.join('；')}`;
+                bad.forEach(msg => {
+                    consoleOut.append(`[${new Date().toLocaleTimeString()}] ${msg}`);
+                    consoleOut.appendChild(document.createElement('br'));
+                });
+                //用变量保存结果
+                waichuang_result = '不符合要求';
+                waichuang_txt = resultText;
+            } else {
+                const resultText = `2F/3F 的玻璃嵌板-NW 外窗防护均符合要求`;
+                consoleOut.append(`[${new Date().toLocaleTimeString()}] ${resultText}`);
+                consoleOut.appendChild(document.createElement('br'));
+                //用变量保存结果
+                waichuang_result = '符合要求';
+                waichuang_txt = resultText;
+            }
+        }
+        //#endregion
+
+        //#region 燃具房间净高评估（7.3.3，自定义输出）
+        // 定义变量
+        let ranju_result;
+        let ranju_txt;
+
+        // 获取并展开“建筑安全”菜单
+        // 绑定“燃具房间净高评估”项
+        document.getElementById('combustion-appliances-control').addEventListener('click', () => {
+            compareStoryHeights();
+        });
+
+        async function compareStoryHeights() {
+            // 1. 拉取1F~9F的“地砖楼面_50”
+            const slabFeatures = await doSqlQueryfloor1(
+                "ElementName = '地砖楼面_50' AND 标高 IN ('1F','2F','3F','4F','5F','6F','7F','8F','9F')",
+                "DataSource:楼板"
+            );
+            // 2. 拉取10F的“倒置式隔热屋面_150”
+            const roofFeatures = await doSqlQueryfloor1(
+                "ElementName = '倒置式隔热屋面_150' AND 标高 = '10F'",
+                "DataSource:楼板"
+            );
+
+            // 3. 构建每层的 顶部/底部高程 映射
+            const slabMap = {};
+            slabFeatures.concat(roofFeatures).forEach(f => {
+                const names = f.fieldNames, vals = f.fieldValues;
+                const level = vals[names.indexOf("标高")];
+                let topIdx = names.indexOf("顶部高程(m)");
+                if (topIdx < 0) topIdx = names.indexOf("顶部高程");
+                let botIdx = names.indexOf("底部高程(m)");
+                if (botIdx < 0) botIdx = names.indexOf("底部高程");
+                const topZ = topIdx >= 0 ? parseFloat(vals[topIdx]) : NaN;
+                const botZ = botIdx >= 0 ? parseFloat(vals[botIdx]) : NaN;
+                if (level) slabMap[level] = { topZ, botZ };
+            });
+
+            // 4. 按顺序计算：上一层底部高程 - 下一层顶部高程
+            const floors = ['1F', '2F', '3F', '4F', '5F', '6F', '7F', '8F', '9F', '10F'];
+            const violations = [];
+
+            for (let i = 1; i < floors.length; i++) {
+                const prev = slabMap[floors[i - 1]];
+                const curr = slabMap[floors[i]];
+                if (!prev || !curr) continue;
+                if (isNaN(prev.botZ) || isNaN(curr.topZ)) continue;
+
+                const storyH = Math.abs(parseFloat((prev.botZ - curr.topZ).toFixed(3)));
+                if (storyH < 2.20) {
+                    violations.push(`${floors[i]} 层高 ${storyH}m`);
+                }
+            }
+
+            // 5. 输出到自定义窗口并保存结果
+            if (violations.length) {
+                const resultText = `存在不合格的层高：${violations.join('；')}`;
+                violations.forEach(msg => {
+                    consoleOut.append(`[${new Date().toLocaleTimeString()}] ${msg}`);
+                    consoleOut.appendChild(document.createElement('br'));
+                });
+                //用变量保存结果
+                ranju_result = '不符合要求';
+                ranju_txt = `存在 ${violations.length} 处层高不符合要求。`;
+            } else {
+                const resultText = `所有层高均 ≥2.20m — 符合规定`;
+                consoleOut.append(`[${new Date().toLocaleTimeString()}] ${resultText}`);
+                consoleOut.appendChild(document.createElement('br'));
+                //用变量保存结果
+                ranju_result = '符合要求';
+                ranju_txt = resultText;
+            }
+        }
+        //#endregion
+
+        //#region场景出图
+        function convertImageToCanvas(image) {
+            var canvas = document.createElement("canvas");
+            canvas.width = image.width;
+            canvas.height = image.height;
+            canvas.getContext("2d").drawImage(image, 0, 0);
+            return canvas;
+        }
+        //下载图片
+        function download(base64data) {
+            var image = new Image();
+            image.src = base64data;
+            image.onload = function () {
+                var canvas = convertImageToCanvas(image);
+                url = canvas.toDataURL("image/jpeg");
+                var a = document.createElement('a');
+                var event = new MouseEvent('click');
+                a.download = (new Date()).getTime() + ".jpg"; // 指定下载图片的名称
+                a.href = url;
+                a.dispatchEvent(event); // 触发超链接的点击事件
+            }
+        }
+        //#endregion场景出图
+
+        //#region 智能化评估
+        //定义变量
+        let zhinenghua_result;
+        let zhinenghua_txt;
+
+        // 获取建设要求菜单
+        var smartRequirementsMenu = document.getElementById('Intelligent-menu');
+        var smartRequirementsSubmenu = document.getElementById('Intelligent-submenu');
+        smartRequirementsMenu.addEventListener('click', function (e) {
+            e.stopPropagation(); // 阻止事件冒泡
+            //closeAllMenus(); // 关闭所有已经打开的菜单项
+            smartRequirementsSubmenu.classList.toggle('active');
+            smartRequirementsMenu.classList.toggle('active');
+        });
+
+        // 获取每套住宅应有卧室、起居室、厨房和卫生间菜单项
+        var smartRequirements = document.getElementById('Building-Intelligence-Assessment');
+        smartRequirements.addEventListener('click', () => {
+            // 显示模态框
+            document.getElementById('SmartModal').style.display = 'block';
+        });
+        // 获取关闭按钮
+        var closeBtn = document.getElementById('closeBtn');
+        closeBtn.addEventListener('click', () => {
+            document.getElementById('SmartModal').style.display = 'none';
+        });
+
+        // 点击模态框外部关闭
+        window.addEventListener('click', (e) => {
+            if (e.target === document.getElementById('SmartModal')) {
+                document.getElementById('SmartModal').style.display = 'none';
+            }
+        });
+
+        document.querySelector('.submitsmart-btn').addEventListener('click', () => {
+            leidatexiao.show = true;
+            
+            const consoleOut = document.getElementById('console');
+            // 获取开关状态
+            const guangxianChecked = document.getElementById('guangxianSwitch').checked;
+            const WIFIChecked = document.getElementById('WIFISwitch').checked;
+            const TVChecked = document.getElementById('TVSwitch').checked;
+            const peixianxiangChecked = document.getElementById('peixianxiangSwitch').checked;
+            const doorChecked = document.getElementById('doorSwitch').checked;
+            // 关闭模态框
+            document.getElementById('SmartModal').style.display = 'none';
+
+            // 判断是否符合要求
+            const compliant = guangxianChecked && WIFIChecked && TVChecked && peixianxiangChecked && doorChecked;
+            const missingItems = [];
+            if (!guangxianChecked) missingItems.push('入户光纤');
+            if (!WIFIChecked) missingItems.push('无线WIFI全覆盖');
+            if (!TVChecked) missingItems.push('有线电视入户');
+            if (!peixianxiangChecked) missingItems.push('户内配线箱');
+            if (!doorChecked) missingItems.push('智能门锁');
+
+            const ts = new Date().toLocaleTimeString();
+            if (compliant) {
+                zhinenghua_result = '符合要求';
+                zhinenghua_txt = '该建筑智能化要求均符合 - 符合规定';
+                consoleOut.append(`[${ts}] [智能化评估] ${zhinenghua_txt}`);
+            } else {
+                zhinenghua_result = '不符合要求';
+                zhinenghua_txt = `该建筑智能化评估缺少以下项：${missingItems.join('、')} - 不符合规定`;
+                consoleOut.append(`[${ts}] [智能化评估] ${zhinenghua_txt}`);
+            }
+            consoleOut.appendChild(document.createElement('br'));
+            setTimeout(() => {
+                leidatexiao.show = false;
+            }, 3000);
+        });
+        //#endregion
+
+        //#region 建筑菜单展开逻辑
+        // 菜单展开逻辑
+            var BuildingSafetyMenu = document.getElementById('Building-Safety-menu');
+            var BuildingSafetyMenuSubmenu = document.getElementById('Building-Safety-submenu');
+            if (BuildingSafetyMenu && BuildingSafetyMenuSubmenu) {
+                BuildingSafetyMenu.addEventListener('click', function (e) {
+                    e.stopPropagation();
+                    //  closeAllMenus();
+                    BuildingSafetyMenuSubmenu.classList.toggle('active');
+                    BuildingSafetyMenu.classList.toggle('active');
+                });
+            }
+        //#endregion 建筑菜单展开逻辑
+
+
+
+        //#region输出报告
+        /* ====== 2. 工具：把十六进制颜色转成 docx rgb ====== */
+        const rgb = hex => {
+            const v = parseInt(hex.slice(1), 16);
+            return { r: (v >> 16) & 0xFF, g: (v >> 8) & 0xFF, b: v & 0xFF };
+        };
+        $('#fenxiboagao').on('click', async function () {
+            /* 0. 命名空间 */
+            const { Document, Packer, Paragraph, TextRun, AlignmentType, Table, TableRow, TableCell,
+                WidthType, BorderStyle, HeadingLevel, Media,VerticalAlign } = docx;
+
+
+            /* 1. 数据 */
+            const now = new Date();
+            const reportNo = `REP-${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, '0')}${String(now.getDate()).padStart(2, '0')}-${String(Math.floor(Math.random() * 1000)).padStart(3, '0')}`;
+            const buildingInfo = {
+                '建筑名称': '阳光花园小区3号楼',
+                '建设单位': '恒信房地产开发有限公司',
+                '建筑地址': '城市新区朝阳路88号',
+                '建筑类型': '住宅建筑',
+                '建筑面积': '5000 平方米',
+                '建筑高度': `${jianzhugaodu} 米`
+            };
+
+            const evaluationResults = [
+                { item: '住宅基本配置', result: zhuzhai_result, details: zhuzhai_txt,details1: zhuzhai_txt},
+                { item: '建筑高度限制', result: '符合要求', details: `建筑高度${jianzhugaodu} 米，小于限高54米` ,details1:''},
+                { item: '建筑容积率控制', result: rongjilv_result, details: rognjilv_txt,details1: ''},
+                { item: '建筑密度控制', result: jianzhumidu_result, details: jianzhumidu_txt ,details1:zhuzhai_txt},
+                { item: '绿地率控制', result: ludilv_result, details: ludilv_txt,details1: ''},
+                { item: '卧室面积控制', result: woshi_result, details: woshi_txt ,details1:woshi_txt},
+                { item: '卧室层高控制', result: woshicenggao_result, details: woshicenggao_txt ,details1:woshicenggao_txt},
+                { item: '居住空间地下限制验证', result: zhujukongjian_result, details: zhujukongjian_txt ,details1:zhujukongjian_txt},
+               // { item: '厨房面积检验', result: , details:  },
+                { item: '卫生间垂直布局冲突检查', result: weishengjian_result, details: weishengjian_txt ,details1:weishengjian_txt},
+                { item: '室内地面高差评估', result: shineidimiangaocha_result, details: shineidimaingaocha_txt,details1: shineidimaingaocha_txt1},
+                { item: '外窗防护评估', result: waichuang_result, details: waichuang_txt,details1: waichuang_txt},
+                { item: '公共楼梯设置评估', result: gongonglouti_result, details: gongonglouti_txt,details1: gongonglouti_txt1},
+                { item: '防护栏杆设置评估', result: fanghulan_result, details: fanghulan_txt,details1:fanghulan_txt},
+                { item: '楼板厚度评估', result: louban_result, details: louban_txt ,details1:louban_txt1},
+                { item: '燃具房间净高评估', result: ranju_result, details: ranju_txt ,details1:''},
+                { item: '房间通风面积检测', result: tongfengmianji_result, details: tongfengmianji_txt,details1: ''},
+                { item: '日照间距要求', result: '符合要求', details: '0.9m外墙处光照时长大于最低光照时长',details1:'' },
+                { item: '智能化评估', result: zhinenghua_result, details: zhinenghua_txt ,details1:zhinenghua_txt},
+            ];
+
+            const normMap = {
+                '建筑容积率控制': 'GB 55038-2025 6.2.1',
+                '建筑密度控制': 'GB 55038-2025 6.2.2',
+                '绿地率控制': 'GB 55038-2025 6.2.3',
+                '居住空间地下限制验证': 'GB 55038-2025 4.1.12',
+                '卫生间垂直布局冲突检查': 'GB 55038-2025 4.1.13',
+                '外窗防护评估': 'GB 55038-2025 4.1.15',
+                '燃具房间净高评估': 'GB 55038-2025 7.3.3',
+                '卧室面积控制': 'GB 55038-2025 5.1.2',
+                '室内地面高差评估': 'GB 55038-2025 4.1.12',
+                '住宅基本配置': 'GB 55038-2025 5.1.1',
+                '厨房面积检验': 'GB 55038-2025 5.1.3',
+                '楼板厚度评估': 'GB 55038-2025 5.0.4',
+                '防护栏杆设置评估': 'GB 55038-2025 4.2.8',
+                '公共楼梯设置评估': 'GB 55038-2025 4.2.2',
+                '卧室层高控制': 'GB 55038-2025 5.2.1',
+                '智能化评估': 'GB 55038-2025 7.1.1',
+                '建筑高度限制': 'GB 55038-2025 4.1.1',
+                '日照间距要求': 'GB 55038-2025 5.3.1'
+            };
+            /* 2. 组装 children */
+            const children = [];
+
+            /* 2.1 主标题 + 副标题 */
+            children.push(
+                new Paragraph({ text: '建筑评估报告', heading: HeadingLevel.TITLE, alignment: AlignmentType.CENTER, spacing: { after: 240 } }),
+                new Paragraph({ text: '建筑规划指标评估结果', alignment: AlignmentType.LEFT, spacing: { after: 300 } })
+            );
+
+            /* 2.2 生成时间 + 报告编号（同一行，右对齐编号） */
+            children.push(
+                new Paragraph({
+                    children: [
+                        new TextRun({ text: `生成时间：${now.toLocaleString()}`, size: 20 }),
+                        new TextRun({ text: `                 报告编号：${reportNo}`, size: 20 })
+                    ],
+                    tabStops: [{ type: docx.TabStopType.RIGHT, position: docx.convertInchesToTwip(7.5) }],
+                    spacing: { after: 200 }
+                })
+            );
+
+            /* 2.3 分割线 */
+            children.push(
+                new Paragraph({
+                    border: { bottom: { color: 'auto', space: 1, style: BorderStyle.SINGLE, size: 6 } },
+                    spacing: { after: 300 }
+                })
+            );
+
+            /* 2.4 建筑基本信息（两列表格）*/
+            const infoRows = [];
+            Object.entries(buildingInfo).forEach(([k, v], idx) => {
+                infoRows.push(
+                    new TableRow({
+                        children: [
+                            new TableCell({ children: [new Paragraph({ text: k + '：', bold: true, alignment: AlignmentType.CENTER  })], width: { size: 25, type: WidthType.PERCENTAGE }, shading: { fill: 'E7EFF6' } }),
+                            new TableCell({ children: [new Paragraph({text: v,alignment: AlignmentType.CENTER,})], width: { size: 25, type: WidthType.PERCENTAGE } })
+                        ]
+                    })
+                );
+            });
+            children.push(
+                new Paragraph({ text: '一、建筑基本信息', heading: HeadingLevel.HEADING_1, spacing: { after: 120 } }),
+                new Table({ rows: infoRows, width: { size: 100, type: WidthType.PERCENTAGE } }),
+                new Paragraph({ spacing: { after: 400 } })
+            );
+
+            /* 2.5 评估结果（表格）*/
+            const evalHeader = new TableRow({
+                children: ['评估项目', '结果', '详细说明'].map(h => new TableCell({
+                    children: [new Paragraph({ text: h, bold: true, alignment: AlignmentType.CENTER })],
+                    shading: { fill: 'D9E2F3' },
+                    width: { size: 33.33, type: WidthType.PERCENTAGE }
+                }))
+            });
+            const evalBody = evaluationResults.map(r => new TableRow({
+                children: [
+                    new TableCell({
+                        children: [new Paragraph({ text: String(r.item ?? ''), alignment: AlignmentType.CENTER })],
+                        width: { size: 33.33, type: WidthType.PERCENTAGE },
+                        verticalAlign: VerticalAlign.CENTER
+                    }),
+                    new TableCell({
+                        children: [new Paragraph({ text: String(r.result ?? ''), alignment: AlignmentType.CENTER })],
+                        width: { size: 33.33, type: WidthType.PERCENTAGE },
+                        verticalAlign: VerticalAlign.CENTER
+                    }),
+                    new TableCell({
+                        children: [new Paragraph({ text: String(r.details ?? '') })]
+                    })
+                ]
+            }));
+            children.push(
+                new Paragraph({ text: '二、评估结果概要信息', heading: HeadingLevel.HEADING_1, spacing: { after: 120 } }),
+                new Table({ rows: [evalHeader, ...evalBody], width: { size: 100, type: WidthType.PERCENTAGE } }),
+                new Paragraph({ spacing: { after: 400 } })
+            );
+            // 三、不合格明细表
+            const failItems = evaluationResults.filter(r => r.result !== '符合要求');
+            const failHeader = new TableRow({
+                children: ['评估项目', '结果', '详细说明', '规范条文'].map(h =>
+                    new TableCell({
+                        children: [new Paragraph({ text: h, bold: true, alignment: AlignmentType.CENTER })],
+                        shading: { fill: 'D9E2F3' },
+                        width: { size: 25, type: WidthType.PERCENTAGE },
+                        verticalAlign: VerticalAlign.CENTER
+                    })
+                )
+            });
+            const failBody = failItems.map(r => new TableRow({
+                children: [
+                    new TableCell({ children: [new Paragraph({ text: r.item, alignment: AlignmentType.CENTER })], verticalAlign: VerticalAlign.CENTER }),
+                    new TableCell({ children: [new Paragraph({ text: r.result, alignment: AlignmentType.CENTER })], verticalAlign: VerticalAlign.CENTER }),
+                    new TableCell({ children: [new Paragraph(r.details)] }),
+                    new TableCell({
+                        children: [new Paragraph({ text: normMap[r.item] || '', alignment: AlignmentType.CENTER })],
+                        verticalAlign: VerticalAlign.CENTER
+                    })
+                ]
+            }));
+
+            children.push(
+                new Paragraph({ text: '三、不合格评估结果详细信息', heading: HeadingLevel.HEADING_1, spacing: { after: 120 } }),
+                new Table({ rows: [failHeader, ...failBody], width: { size: 100, type: WidthType.PERCENTAGE } }),
+                new Paragraph({ spacing: { after: 400 } })
+            );
+
+            const nonCompliant = evaluationResults.filter(r => r.result !== '符合要求');
+
+            /* 逐条生成 3.x 小节 */
+            nonCompliant.forEach((r, idx) => {
+                const sectionNo = `3.${idx + 1}`;
+                children.push(
+                    new Paragraph({
+                        text: `${sectionNo} ${r.item}`,
+                        heading: HeadingLevel.HEADING_2,
+                        spacing: { after: 80 }
+                    }),
+                    new Table({
+                        width: { size: 100, type: WidthType.PERCENTAGE },
+                        rows: [
+                            /* 第1行：评估项目 */
+                            new TableRow({
+                                children: [
+                                    new TableCell({
+                                        width: { size: 20, type: WidthType.PERCENTAGE },
+                                        shading: { fill: 'E7EFF6' },
+                                        children: [new Paragraph({ text: '评估项目', bold: true, alignment: AlignmentType.CENTER })],
+                                        verticalAlign: VerticalAlign.CENTER
+                                    }),
+                                    new TableCell({
+                                        width: { size: 80, type: WidthType.PERCENTAGE },
+                                        children: [new Paragraph({ text: r.item, alignment: AlignmentType.CENTER })],
+                                        verticalAlign: VerticalAlign.CENTER
+                                    })
+                                ]
+                            }),
+                            /* 第2行：详细说明 */
+                            new TableRow({
+                                children: [
+                                    new TableCell({
+                                        shading: { fill: 'E7EFF6' },
+                                        children: [new Paragraph({ text: '详细说明', bold: true, alignment: AlignmentType.CENTER })],
+                                        verticalAlign: VerticalAlign.CENTER
+                                    }),
+                                    new TableCell({
+                                        children: [new Paragraph({ text: String(r.details1 ?? ''), alignment: AlignmentType.CENTER })],
+                                        verticalAlign: VerticalAlign.CENTER
+                                    })
+                                ]
+                            }),
+                            /* 第3行：参考规范 */
+                            new TableRow({
+                                children: [
+                                    new TableCell({
+                                        shading: { fill: 'E7EFF6' },
+                                        children: [new Paragraph({ text: '参考规范', bold: true, alignment: AlignmentType.CENTER })],
+                                        verticalAlign: VerticalAlign.CENTER
+                                    }),
+                                    new TableCell({
+                                        children: [new Paragraph({ text: normMap[r.item] ?? '', alignment: AlignmentType.CENTER })],
+                                        verticalAlign: VerticalAlign.CENTER
+                                    })
+                                ]
+                            })
+                        ]
+                    }),
+                    new Paragraph({ spacing: { after: 200 } })
+                );
+            });
+
+            /* 2.6 评估结论 */
+            
+            children.push(
+                new Paragraph({ text: '四、评估结论', heading: HeadingLevel.HEADING_1, spacing: { after: 120 } }),
+                new Paragraph({
+                    indent: { firstLine: 480 },
+                    children: [
+                        new TextRun(
+                            nonCompliant.length
+                                ? `经评估，本项目共 ${nonCompliant.length} 项指标不符合规范要求，分别为：${nonCompliant.map(r => r.item).join('、')}。建议针对上述问题逐项整改并复核合格后，再行推进下一阶段工作。`
+                                : '经评估，本项目所有指标均符合规范要求，可进入下一阶段。'
+                        )
+                    ]
+                })
+            );
+            /* ====== 5. 签名区域 ====== */
+            children.push(
+                new Paragraph({ spacing: { before: 400, after: 200 } }),   // 空一段
+                new Table({
+                    width: { size: 100, type: WidthType.PERCENTAGE },
+                    borders: { top: { style: BorderStyle.NONE }, bottom: { style: BorderStyle.NONE }, left: { style: BorderStyle.NONE }, right: { style: BorderStyle.NONE } },
+                    rows: [
+                        new TableRow({
+                            children: [
+                                new TableCell({
+                                    borders: { top: { style: BorderStyle.SINGLE, size: 1, color: '000000' }, bottom: { style: BorderStyle.NONE }, left: { style: BorderStyle.NONE }, right: { style: BorderStyle.NONE } },
+                                    children: [new Paragraph({ text: '评估人签名：', alignment: AlignmentType.CENTER })],
+                                    width: { size: 50, type: WidthType.PERCENTAGE }
+                                }),
+                                new TableCell({
+                                    borders: { top: { style: BorderStyle.SINGLE, size: 1, color: '000000' }, bottom: { style: BorderStyle.NONE }, left: { style: BorderStyle.NONE }, right: { style: BorderStyle.NONE } },
+                                    children: [new Paragraph({ text: '审核人签名：', alignment: AlignmentType.CENTER })],
+                                    width: { size: 50, type: WidthType.PERCENTAGE }
+                                })
+                            ]
+                        }),
+                        new TableRow({
+                            children: [
+                                new TableCell({
+                                    borders: { top: { style: BorderStyle.NONE }, bottom: { style: BorderStyle.NONE }, left: { style: BorderStyle.NONE }, right: { style: BorderStyle.NONE } },
+                                    children: [new Paragraph({ text: '', spacing: { after: 200 } })]
+                                }),
+                                new TableCell({
+                                    borders: { top: { style: BorderStyle.NONE }, bottom: { style: BorderStyle.NONE }, left: { style: BorderStyle.NONE }, right: { style: BorderStyle.NONE } },
+                                    children: [new Paragraph({ text: '', spacing: { after: 200 } })]
+                                })
+                            ]
+                        }),
+                        new TableRow({
+                            children: [
+                                new TableCell({
+                                    borders: { top: { style: BorderStyle.NONE }, bottom: { style: BorderStyle.NONE }, left: { style: BorderStyle.NONE }, right: { style: BorderStyle.NONE } },
+                                    children: [new Paragraph({ text: `评估日期：${new Date().toLocaleDateString()}`, alignment: AlignmentType.CENTER })]
+                                }),
+                                new TableCell({
+                                    borders: { top: { style: BorderStyle.NONE }, bottom: { style: BorderStyle.NONE }, left: { style: BorderStyle.NONE }, right: { style: BorderStyle.NONE } },
+                                    children: [new Paragraph({ text: '（盖章处）', alignment: AlignmentType.CENTER, italics: true })]
+                                })
+                            ]
+                        })
+                    ]
+                })
+            );
+
+            /* 3. 创建并下载 */
+            const docxDoc = new Document({ creator: '评估系统', title: '建筑评估报告', sections: [{ children }] });
+            const blob = await Packer.toBlob(docxDoc);
+            saveAs(blob, `建筑评估报告_${now.toISOString().slice(0, 10)}.docx`);
+        });
+        //#endregion输出报告
+
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/docx@8.5.0/build/index.iife.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/file-saver@2.0.5/dist/FileSaver.min.js"></script>
+</body>
+
+</html>
